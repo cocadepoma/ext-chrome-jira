@@ -1,0 +1,11 @@
+@import './globals.css';
+
+html {
+  width: 800px;
+}
+
+html,
+body,
+#root {
+  height: 586px;
+}

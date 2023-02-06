@@ -1,0 +1,10 @@
+.new-entry-dialog__textfield {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 992px) {
+  .new-entry-dialog__textfield {
+    width: 30rem;
+  } 
+}

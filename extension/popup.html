@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <title>Focus your mind notification</title>
+  <style>
+    :root {
+      color-scheme: light dark
+    }
+
+    html {
+      height: 100vh;
+    }
+
+    body {
+      background-color: #3c0f5f;
+      background-repeat: repeat;
+      background-position: center !important;
+      background-size: cover !important;
+      height: 100%;
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 3rem;
+      font-family: 'VT323', monospace;
+      letter-spacing: 5px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      padding-top: 15vh;
+      box-sizing: border-box;
+      height: 6rem;
+    }
+
+    .content {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    img {
+      width: 4rem;
+      height: 5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <img />
+      <h1>Time over!</h1>
+    </div>
+  </div>
+</body>
+<script src="popup.js"></script>
+
+</html>
