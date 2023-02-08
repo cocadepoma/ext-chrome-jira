@@ -25,9 +25,12 @@ export const AddEntryDialog = ({
   };
 
   const onSave = () => {
-    if (!inputValue.length) return;
+    if (!inputValue.trim().length) {
+      setIsTouched(true);
+      return;
+    }
 
-    handleConfirm(inputValue, board?._id!);
+    handleConfirm(inputValue.trim(), board?._id!);
     resetForm();
   };
 
@@ -40,8 +43,8 @@ export const AddEntryDialog = ({
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>New ticket</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Add new Ticket to the board: <strong style={{ color: '#41ff00' }}>{board?.name}</strong>
+        <DialogContentText sx={{ margin: '10px 0' }}>
+          Add new Ticket to the board: <strong style={{ color: 'rgba(15, 70, 147, 0.787)' }}>{board?.name}</strong>
         </DialogContentText>
         <TextField
           className={styles['new-entry-dialog__textfield']}
@@ -49,8 +52,8 @@ export const AddEntryDialog = ({
           autoFocus
           multiline
           label="Ticket name"
-          helperText={inputValue.length <= 0 && isTouched && "Insert a value"}
-          error={inputValue.length <= 0 && isTouched}
+          helperText={inputValue.trim().length <= 0 && isTouched && "Insert a value"}
+          error={inputValue.trim().length <= 0 && isTouched}
           value={inputValue}
           onChange={onTextChange}
           onBlur={() => setIsTouched(true)}

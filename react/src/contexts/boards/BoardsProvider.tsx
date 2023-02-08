@@ -1,8 +1,10 @@
 import { FC, useEffect, useReducer } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { BoardsContext, boardsReducer } from '.';
 import { Category, Entry, EntryResponse } from '../../interfaces';
 import { useSnackbar } from 'notistack';
+import { CleaningServices } from '@mui/icons-material';
 
 export interface BoardsState {
   boards: Category[];
@@ -26,8 +28,12 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const loadBoards = async () => {
     try {
-      // const { data } = await boardsApi.get<Category[]>('/category');
-      dispatch({ type: '[Boards] - Load data', payload: mock });
+      const { categories } = await chrome.storage.sync.get(null);
+      if (!categories) return;
+
+      dispatch({ type: '[Boards] - Load data', payload: categories });
+
+      // dispatch({ type: '[Boards] - Load data', payload: mock });
     } catch (error) {
       console.log(error, 'An error ocurred while getting the Boards');
     }
@@ -35,19 +41,39 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const addNewEntry = async (description: string, boardId: string) => {
     try {
-      // const { data } = await boardsApi.post<EntryResponse>('/entries', { description, categoryId: boardId });
+      const newEntry: Entry = {
+        _id: uuidv4(),
+        description,
+        categoryId: boardId,
+        color: '',
+        content: '',
+        createdAt: Date.now(),
+      };
 
-      // dispatch({ type: '[Boards] - Add-Entry', payload: data.entry });
+      const copyBoard = structuredClone(state.boards.find(board => board._id === boardId)) as Category;
+      copyBoard.tickets = [newEntry, ...copyBoard.tickets];
+
+      const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
+
+      dispatch({ type: '[Boards] - Load data', payload: newBoards });
+
+      await chrome.storage.sync.set({ categories: newBoards });
     } catch (error) {
       console.log(error, 'An error ocurred while adding a new entriy');
     }
   };
 
-  const updateEntry = async ({ _id, description, categoryId, content, color }: Entry, showSnack = false) => {
+  const updateEntry = async (ticket: Entry, showSnack = false) => {
     try {
-      // const { data } = await boardsApi.put<Entry>(`/entries/${_id}`, { description, categoryId, content, color });
+      const copyBoard = structuredClone(state.boards.find(board => board._id === ticket.categoryId)) as Category;
+      copyBoard.tickets = copyBoard.tickets.map(tk => tk._id === ticket._id ? ticket : tk);
 
-      // dispatch({ type: '[Boards] - Entry-Updated', payload: data });
+      const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
+
+      dispatch({ type: '[Boards] - Load data', payload: newBoards });
+
+      await chrome.storage.sync.set({ categories: newBoards });
+
       if (showSnack) {
         enqueueSnackbar('Ticket updated succesfully', {
           variant: 'success',
@@ -65,9 +91,18 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const addNewBoard = async (name: string) => {
     try {
-      // const { data } = await boardsApi.post<Category>('/category', { name });
+      const newBoard: Category = {
+        _id: uuidv4(),
+        name,
+        tickets: [],
+        createdAt: Date.now(),
+        indexOrder: !state.boards.length ? 0 : state.boards.length,
+      };
 
-      // dispatch({ type: '[Boards] - Add Board', payload: data });
+      const updatedBoards = [...state.boards, newBoard];
+      dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
+
+      await chrome.storage.sync.set({ categories: updatedBoards });
 
       enqueueSnackbar(`Board added succesfully`, {
         variant: 'success',
@@ -82,32 +117,72 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
     }
   };
 
-  const updateBoards = async (boards: Category[]) => {
+  const updateBoards = async ([board1, board2]: Category[]) => {
     try {
-      // dispatch({ type: '[Boards] - Update Boards', payload: boards });
+      const updatedBoards = state.boards.map(board => {
+        if (board._id === board1._id) {
+          return board1
+        }
+        if (board._id === board2?._id) {
+          return board2;
+        }
+        return board;
+      })
 
-      // const requests = boards.map(({ _id, name, tickets, indexOrder }) =>
-      // boardsApi.put<Entry>(`/category/${_id}`, { name, tickets, indexOrder }));
+      dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
 
-      // await Promise.all(requests);
+      await chrome.storage.sync.set({ categories: updatedBoards });
     } catch (error) {
       console.log({ error });
     }
   };
 
-  const deleteBoard = async (board: Category) => {
+  const deleteBoard = async ({ _id }: Category) => {
     try {
-      // dispatch({ type: '[Boards] - Remove Board', payload: board });
+      const filteredBoards = state.boards.filter(stateBoard => stateBoard._id !== _id);
+      const refreshedSortedIndexBoards = filteredBoards
+        .map((board, i) => ({
+          ...board,
+          indexOrder: i
+        }))
+        .sort((a, b) => a.indexOrder - b.indexOrder);
 
-      // await boardsApi.delete(`/category/${board._id}`);
+      dispatch({ type: '[Boards] - Load data', payload: refreshedSortedIndexBoards });
+
+      await chrome.storage.sync.set({ categories: refreshedSortedIndexBoards });
+
+      enqueueSnackbar('Board removed succesfully', {
+        variant: 'success',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
     } catch (error) {
       console.log({ error });
     }
   };
 
-  const deleteEntry = async ({ _id }: Entry) => {
+  const deleteEntry = async ({ _id, categoryId }: Entry) => {
     try {
-      // await boardsApi.delete(`/entries/${_id}`);
+      const copyBoard = structuredClone(state.boards.find(board => board._id === categoryId)) as Category;
+      const updatedTickets = copyBoard.tickets.filter(ticket => ticket._id !== _id);
+      copyBoard.tickets = updatedTickets;
+
+      const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
+      dispatch({ type: '[Boards] - Load data', payload: newBoards });
+
+      await chrome.storage.sync.set({ categories: newBoards });
+
+      enqueueSnackbar('Ticket removed succesfully', {
+        variant: 'success',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
     } catch (error) {
       console.log({ error });
     }

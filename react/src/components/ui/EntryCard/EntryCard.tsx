@@ -11,8 +11,8 @@ import { IconButton } from "@mui/material";
 import { Entry } from "../../../interfaces"
 
 import styles from './EntryCard.module.css'
-// import { useRouter } from "next/router";
 import { getTicketTime } from '../../../utils/utils';
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   entry: Entry;
@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setActiveEditTicket }) => {
-  // const router = useRouter();
+  const navigate = useNavigate();
 
   const onDelete = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -44,8 +44,7 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
             {...draggableProvided.dragHandleProps}
             ref={draggableProvided.innerRef}
           >
-            {/* <div className={styles['entrycard__actions--container']} onClick={() => router.push(`/tickets/${entry._id}`)}> */}
-            <div className={styles['entrycard__actions--container']} onClick={() => { }}>
+            <div className={styles['entrycard__actions--container']} onClick={() => navigate(`/ticket/${entry._id}`)}>
 
               <p className={styles.entrycard__text}><LabelTwoToneIcon style={{ color: entry.color || 'rgba(0,0,0,.5)' }} fontSize="small" /> {entry.description}</p>
 

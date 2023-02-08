@@ -42,7 +42,7 @@ export const EditBoardDialog = ({
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>Edit Board</DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ paddingTop: '20px!important' }}>
         <TextField
           className={styles['new-board-dialog__textfield']}
           fullWidth

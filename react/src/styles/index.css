@@ -8,4 +8,6 @@ html,
 body,
 #root {
   height: 586px;
+  width: 100%;
+  min-width: 800px;
 }

@@ -5,7 +5,7 @@
   padding-top: 1rem;
   flex-direction: column;
   padding-left: 1rem;
-  padding-right: 2rem;
+  padding-right: 116rem;
 }
 
 .home__context::-webkit-scrollbar {
@@ -84,7 +84,7 @@
   }
 
   .home__list--container {
-    min-width: 15.5rem;
-    max-width: 15.5rem;
+    min-width: 14.5rem;
+    max-width: 14.5rem;
   }
 }

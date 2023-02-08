@@ -121,7 +121,7 @@ const Home = () => {
 
           : (
             <DragDropContext onDragEnd={onDragEndHandler}>
-              <div className={styles['home__context']}>
+              <div className={styles['home__context']} style={{ paddingRight: boards.length > 0 ? boards.length * 249 : 0 }}>
                 {boards.map((board, i) => (
                   <div className={styles['home__board']} key={board._id}>
 

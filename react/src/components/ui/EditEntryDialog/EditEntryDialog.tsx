@@ -44,8 +44,7 @@ export const EditEntryDialog = ({
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>Edit ticket</DialogTitle>
-      <DialogContent>
-
+      <DialogContent sx={{ paddingTop: '20px!important' }}>
         <TextField
           className={styles['new-entry-dialog__textfield']}
           fullWidth

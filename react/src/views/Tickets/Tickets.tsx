@@ -1,4 +1,5 @@
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import { ColorResult, GithubPicker } from 'react-color';
 
@@ -21,7 +22,8 @@ interface Props {
 }
 
 const TicketView = () => {
-  // const router = useRouter();
+  const navigate = useNavigate();
+
   const ticket: Entry = {
     _id: '123123',
     createdAt: 12313,
@@ -117,7 +119,7 @@ const TicketView = () => {
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // router.push('/');
+    navigate('/');
   };
 
   const onCloseDeleteTicket = () => {
@@ -137,7 +139,7 @@ const TicketView = () => {
     updateBoards([updatedBoard]);
 
     onCloseDeleteTicket();
-    // router.push('/');
+    navigate('/');
   };
 
   const onColorChange = (e: ColorResult) => {

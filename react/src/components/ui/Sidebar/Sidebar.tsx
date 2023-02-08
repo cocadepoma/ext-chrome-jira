@@ -12,12 +12,11 @@ import {
 } from "@mui/material"
 import { UIContext } from "../../../contexts/ui";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { useRouter } from "next/router";
-// import Image from "next/image";
 
 export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
   const { sideMenuOpen, closeSideMenu } = useContext(UIContext);
   const [activeUrl, setActiveUrl] = useState('base');
 

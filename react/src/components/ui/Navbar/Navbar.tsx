@@ -1,16 +1,14 @@
 import { useContext } from 'react';
-// import Image from "next/image";
-// import NextLink from 'next/link';
 
 import { MenuOutlined as MenuOutlinedIcon } from '@mui/icons-material'
 import { AppBar, Toolbar, IconButton, Typography, Link } from '@mui/material'
 
 import { UIContext } from '../../../contexts/ui';
-// import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
   const { openSideMenu } = useContext(UIContext);
-  // const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <AppBar position="fixed" elevation={0} sx={{ backgroundColor: 'rgb(255,255,255)', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem' }}>
@@ -22,8 +20,8 @@ export const Navbar = () => {
             alt="logo"
             width={20}
             height={20}
-            onClick={() => { }}
-            style={{ cursor: 'pointer' }}
+            onClick={() => navigate('/')}
+            style={{ cursor: 'pointer', transform: 'scaleX(-1)' }}
           />
 
           <Typography variant="h6" sx={{ color: 'rgba(0,0,0,0.7)', fontSize: '1rem' }}>LibreJira</Typography>
