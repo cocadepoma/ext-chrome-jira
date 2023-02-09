@@ -6,7 +6,7 @@ export const EmptyBoard = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-      <Typography variant="h1" sx={{ fontSize: '1.4rem', color: 'rgba(0,0,0,0.8)' }}>You don&apos; t have any board yet,
+      <Typography variant="h1" sx={{ fontSize: '1.4rem' }}>You don&apos; t have any board yet,
         <span
           onClick={() => navigate('/boards')}
           style={{ color: '#2883FF', cursor: 'pointer' }}> add one</span>.

@@ -28,12 +28,12 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const loadBoards = async () => {
     try {
-      const { categories } = await chrome.storage.sync.get(null);
-      if (!categories) return;
+      // const { categories } = await chrome.storage.sync.get(null);
+      // if (!categories) return;
 
-      dispatch({ type: '[Boards] - Load data', payload: categories });
+      // dispatch({ type: '[Boards] - Load data', payload: categories });
 
-      // dispatch({ type: '[Boards] - Load data', payload: mock });
+      dispatch({ type: '[Boards] - Load data', payload: mock });
     } catch (error) {
       console.log(error, 'An error ocurred while getting the Boards');
     }

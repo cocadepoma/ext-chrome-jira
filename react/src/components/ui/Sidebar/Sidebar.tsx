@@ -35,7 +35,7 @@ export const Sidebar = () => {
       open={sideMenuOpen}
       onClose={closeSideMenu}
     >
-      <Box sx={{ width: 250 }}>
+      <Box sx={{ width: '160px', }}>
         <Box sx={{ padding: '5px 10px', textAlign: 'center', margin: '1rem 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
           <Typography variant="body1">LibreJira</Typography>
           <img
@@ -53,10 +53,10 @@ export const Sidebar = () => {
             closeSideMenu();
             navigate('/');
           }}>
-            <ListItemIcon>
-              <DashboardOutlined />
+            <ListItemIcon sx={{ minWidth: '35px' }}>
+              <DashboardOutlined sx={{ width: '1rem', height: '1rem' }} />
             </ListItemIcon>
-            <ListItemText primary={'Dashboard'} />
+            <ListItemText primary={'Dashboard'} sx={{ '& span': { fontSize: '0.8rem' } }} />
           </ListItem>
 
 
@@ -64,10 +64,10 @@ export const Sidebar = () => {
             closeSideMenu();
             navigate('/boards');
           }}>
-            <ListItemIcon>
-              <DashboardCustomizeOutlined />
+            <ListItemIcon sx={{ minWidth: '35px' }}>
+              <DashboardCustomizeOutlined sx={{ width: '1rem', height: '1rem' }} />
             </ListItemIcon>
-            <ListItemText primary={'Edit Boards'} />
+            <ListItemText primary={'Edit Boards'} sx={{ '& span': { fontSize: '0.8rem' } }} />
           </ListItem>
 
         </List>
