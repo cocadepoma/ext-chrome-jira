@@ -36,7 +36,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "/ticket/:id",
+    path: "/ticket/:boardid/:ticketid",
     element: (
       <Layout>
         <TicketView />

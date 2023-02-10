@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material"
-// import { Category } from "../../../interfaces";
 
 import styles from './AddEntryDialog.module.css';
 
@@ -40,7 +39,7 @@ export const AddEntryDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isOpen} onClose={handleClose} PaperProps={{ sx: { width: '400px', maxWidth: '400px' } }}>
       <DialogTitle>New ticket</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ margin: '10px 0' }}>

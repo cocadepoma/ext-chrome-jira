@@ -44,7 +44,7 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
             {...draggableProvided.dragHandleProps}
             ref={draggableProvided.innerRef}
           >
-            <div className={styles['entrycard__actions--container']} onClick={() => navigate(`/ticket/${entry._id}`)}>
+            <div className={styles['entrycard__actions--container']} onClick={() => navigate(`/ticket/${entry.categoryId}/${entry._id}`)}>
 
               <p className={styles.entrycard__text}><LabelTwoToneIcon style={{ color: entry.color || 'rgba(0,0,0,.5)' }} fontSize="small" /> {entry.description}</p>
 

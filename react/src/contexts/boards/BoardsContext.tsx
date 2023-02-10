@@ -10,6 +10,7 @@ export interface ContextProps {
   deleteBoard: (board: Category) => Promise<void>;
   addNewBoard: (name: string) => Promise<void>;
   updateBoards: (boards: Category[]) => Promise<void>;
+  patchBoards: (boards: Category[]) => Promise<void>;
 }
 
 export const BoardsContext = createContext({} as ContextProps);

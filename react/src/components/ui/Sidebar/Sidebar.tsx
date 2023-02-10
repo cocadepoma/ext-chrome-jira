@@ -21,7 +21,6 @@ export const Sidebar = () => {
   const [activeUrl, setActiveUrl] = useState('base');
 
   useEffect(() => {
-    console.log(window.location.href)
     if (window.location.href.includes('boards')) {
       setActiveUrl('boards');
     } else {

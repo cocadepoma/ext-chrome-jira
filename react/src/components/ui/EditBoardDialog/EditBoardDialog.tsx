@@ -40,7 +40,7 @@ export const EditBoardDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isOpen} onClose={handleClose} PaperProps={{ sx: { width: '400px', maxWidth: '400px' } }}>
       <DialogTitle>Edit Board</DialogTitle>
       <DialogContent sx={{ paddingTop: '20px!important' }}>
         <TextField

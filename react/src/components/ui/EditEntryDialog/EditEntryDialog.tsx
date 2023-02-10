@@ -42,7 +42,7 @@ export const EditEntryDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isOpen} onClose={handleClose} PaperProps={{ sx: { width: '400px', maxWidth: '400px' } }}>
       <DialogTitle>Edit ticket</DialogTitle>
       <DialogContent sx={{ paddingTop: '20px!important' }}>
         <TextField
@@ -50,6 +50,7 @@ export const EditEntryDialog = ({
           fullWidth
           autoFocus
           multiline
+          maxRows={3}
           label="Ticket name"
           helperText={inputValue.length <= 0 && isTouched && "Insert a value"}
           error={inputValue.length <= 0 && isTouched}

@@ -13,7 +13,7 @@ import { Category } from '../../interfaces'
 import styles from '../../styles/modules/Boards.module.css';
 
 const BoardsView = () => {
-  const { boards, updateBoards, addNewBoard, deleteBoard } = useContext(BoardsContext);
+  const { boards, patchBoards, addNewBoard, deleteBoard, updateBoards } = useContext(BoardsContext);
   const [isNewBoardDialogOpen, setIsNewBoardDialogOpen] = useState(false);
   const [activeDeleteBoard, setActiveDeleteBoard] = useState<Category | null>(null);
   const [activeEditBoard, setActiveEditBoard] = useState<Category | null>(null);
@@ -39,7 +39,7 @@ const BoardsView = () => {
       indexOrder: i
     }));
 
-    updateBoards(updatedBoards);
+    patchBoards(updatedBoards);
   };
 
   const handleAddNewBoard = (name: string) => {

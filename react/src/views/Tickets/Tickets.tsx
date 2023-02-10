@@ -1,12 +1,13 @@
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ColorResult, GithubPicker } from 'react-color';
+import { useSnackbar } from "notistack";
 
 import { Button, Card, CardActions, CardContent, CardHeader, FormControl, Grid, Autocomplete, TextField, Typography } from "@mui/material"
 import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import { Box } from "@mui/system";
-import { SaveOutlined } from "@mui/icons-material";
+import { SaveOutlined } from '@mui/icons-material';
 import UndoIcon from '@mui/icons-material/Undo';
 
 import { BoardsContext } from '../../contexts/boards/BoardsContext';
@@ -17,31 +18,23 @@ import { DeleteEntryDialog } from "../../components/ui";
 import { Category, Entry } from "../../interfaces";
 import { getTicketTime } from "../../utils";
 
-interface Props {
-  ticket: Entry;
-}
-
 const TicketView = () => {
   const navigate = useNavigate();
+  const params = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const ticket: Entry = {
-    _id: '123123',
-    createdAt: 12313,
-    description: '',
-    content: '',
-    categoryId: '123',
-    color: ''
-  }
+  const [ticket, setTicket] = useState<Entry | null>(null);
+
   const { boards, updateBoards, deleteEntry, updateEntry } = useContext(BoardsContext);
 
   const [isTouched, setIsTouched] = useState(false);
   const [form, setForm] = useState({
-    description: ticket.description,
-    content: ticket.content || '',
+    description: '',
+    content: '',
   });
 
   const [selectedBoard, setSelectedBoard] = useState<Category | null>(null);
-  const [color, setColor] = useState<string>(ticket.color || 'rgba(0,0,0,.5)');
+  const [color, setColor] = useState<string>('rgba(0,0,0,.5)');
 
   const [activeDeleteTicket, setActiveDeleteTicket] = useState<boolean>(false);
 
@@ -49,10 +42,21 @@ const TicketView = () => {
 
   useEffect(() => {
     if (!boards.length) return;
+    loadTicketWithId();
 
-    setSelectedBoard(boards.find(board => board._id === ticket.categoryId)!);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boards])
+  }, [params]);
+
+  const loadTicketWithId = () => {
+    const ticketId = params.ticketid;
+    const boardId = params.boardid;
+
+    const board = boards.find(board => board._id === boardId)!;
+    const ticket = board.tickets.find(tk => tk._id === ticketId)!;
+    setSelectedBoard(board);
+
+    setTicket(ticket);
+    setForm({ description: ticket.description, content: ticket.content || '' });
+  };
 
   const onFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -71,7 +75,7 @@ const TicketView = () => {
   };
 
   const onSaveForm = async () => {
-    if (!selectedBoard || form.description.trim().length === 0 || form.description.length <= 2) return;
+    if (!selectedBoard || form.description.trim().length === 0 || form.description.length <= 2 || !ticket) return;
 
     const newTicket = {
       ...ticket,
@@ -117,7 +121,7 @@ const TicketView = () => {
     await updateEntry(newTicket, true);
     await updateBoards(boardsToUpdate);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     navigate('/');
   };
@@ -126,9 +130,11 @@ const TicketView = () => {
     setActiveDeleteTicket(false);
   };
 
-  const handleConfirmDeleteTicket = () => {
+  const handleConfirmDeleteTicket = async () => {
+    if (!ticket) return;
+
     const entryBoard = boards.find(board => board._id === ticket.categoryId)!;
-    const updatedTickets = entryBoard.tickets.filter(ticket => ticket._id !== ticket._id);
+    const updatedTickets = entryBoard.tickets.filter(tk => tk._id !== ticket._id);
 
     const updatedBoard: Category = {
       ...entryBoard,
@@ -147,115 +153,148 @@ const TicketView = () => {
   };
 
   return (
-    <Layout title={`Ticket: ${ticket.description.substring(0, 15)} ...`}>
+    <div>
       <Grid
         container
         justifyContent="center"
-        sx={{ marginTop: 14 }}
+        sx={{ marginTop: '25px', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
       >
-        <Grid item xs={11} sm={8} md={6} xl={4}>
-          <Card>
-            <CardHeader
-              title={`Ticket: ${form.description}`}
-              subheader={`Created ${getTicketTime(ticket.createdAt)}`}
-              titleTypographyProps={{ style: { fontSize: 16 } }}
-              subheaderTypographyProps={{ style: { fontSize: 10 } }}
-            />
-
-            <CardContent>
-
-              <TextField
-                sx={{ marginBottom: 4, fontSize: 10 }}
-                fullWidth
-                multiline
-                label="Name"
-                name="description"
-                onChange={onFieldChange}
-                value={form.description}
-                onBlur={() => setIsTouched(true)}
-                helperText={isNotValid && 'The name is mandatory'}
-                error={isNotValid}
+        {ticket && (
+          <Grid item sx={{ width: '59%' }}>
+            <Card>
+              <CardHeader
+                sx={{ padding: '10px 16px 0 16px' }}
+                title={`Ticket: ${form.description.length > 35 ? form.description.substring(0, 35) + ' ...' : form.description}`}
+                subheader={`Created ${getTicketTime(ticket.createdAt)}`}
+                titleTypographyProps={{ style: { fontSize: '0.8rem' } }}
+                subheaderTypographyProps={{ style: { fontSize: '0.6rem' } }}
               />
 
-              <FormControl fullWidth>
-                <Autocomplete
-                  clearOnEscape
-                  selectOnFocus
+              <CardContent>
+
+                <TextField
+                  sx={{
+                    marginBottom: '14px', fontSize: 10,
+                    '& .MuiInputBase-root': { padding: '8.5px 14px' },
+                    '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-4px', left: '2px' },
+                    '& .MuiFormLabel-root.MuiInputLabel-shrink': { top: '2px' },
+                  }}
                   fullWidth
-                  id="combo-box-demo"
-                  options={boards}
-                  getOptionLabel={(option) => option.name}
-                  isOptionEqualToValue={(option: any, value: any) => option.name === value.name}
-                  renderOption={(props, option) => (
-                    <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                      {option.name}
-                    </Box>
-                  )}
-                  value={selectedBoard}
-                  renderInput={(params) => <TextField {...params} label="Board" />}
-                  onChange={onBoardChange}
-                  defaultValue={boards.find(board => board._id === ticket.categoryId)}
+                  multiline
+                  maxRows={2}
+                  label="Name"
+                  name="description"
+                  onChange={onFieldChange}
+                  value={form.description}
+                  onBlur={() => setIsTouched(true)}
+                  helperText={isNotValid && 'The name is mandatory'}
+                  error={isNotValid}
                 />
-              </FormControl>
 
-              <TextField
-                sx={{ marginBottom: 4, marginTop: 4 }}
-                fullWidth
-                placeholder="Description"
-                multiline
-                rows={10}
-                label="Description"
-                name="content"
-                onChange={onFieldChange}
-                value={form.content}
-              />
+                <FormControl fullWidth>
+                  <Autocomplete
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        padding: '4px 10px'
+                      },
+                      '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-3px', left: '2px' },
+                      '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                        top: '2px'
+                      },
+                    }}
+                    ListboxProps={{ style: { fontSize: '0.8rem' } }}
+                    clearOnEscape
+                    selectOnFocus
+                    fullWidth
+                    id="combo-box-demo"
+                    options={boards}
+                    getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option: any, value: any) => option.name === value.name}
+                    renderOption={(props, option) => (
+                      <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                        {option.name}
+                      </Box>
+                    )}
+                    value={selectedBoard}
+                    renderInput={(params) => <TextField {...params} label="Board" />}
+                    onChange={onBoardChange}
+                    defaultValue={boards.find(board => board._id === ticket.categoryId)}
+                  />
+                </FormControl>
 
-              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-                Ticket Color:
-                <span style={{
-                  boxShadow: '1px 1px 2px -1px rgba(0,0,0,0.6)',
-                  backgroundColor: color,
-                  height: '1.5rem',
-                  width: '1.5rem',
-                  display: 'inline-block',
-                }} />
-              </Typography>
-              <GithubPicker color={color} onChangeComplete={onColorChange} />
-            </CardContent>
+                <TextField
+                  sx={{
+                    marginBottom:
+                      '14px', marginTop: '14px',
+                    '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-3px', left: '2px' },
+                    '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                      top: '2px'
+                    },
+                  }}
+                  fullWidth
+                  placeholder="Description"
+                  multiline
+                  rows={4}
+                  label="Description"
+                  name="content"
+                  onChange={onFieldChange}
+                  value={form.content}
+                />
 
-            <CardActions sx={{ display: 'flex', justifyContent: 'space-between', padding: 2 }}>
-              <Button
-                variant="outlined"
-                color="info"
-                startIcon={<UndoIcon />}
-                // onClick={() => router.push('/')}>
-                onClick={() => { }}>
-                Back
-              </Button>
+                <Typography variant="body1" sx={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                  Ticket Color:
+                  <span style={{
+                    boxShadow: '1px 1px 2px -1px rgba(0,0,0,0.6)',
+                    backgroundColor: color,
+                    height: '1.5rem',
+                    width: '1.5rem',
+                    display: 'inline-block',
+                  }} />
+                </Typography>
+                <GithubPicker color={color} onChangeComplete={onColorChange} />
+              </CardContent>
 
-              <div>
+              <CardActions sx={{ display: 'flex', justifyContent: 'space-between', padding: 2 }}>
                 <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteOutline />}
-                  onClick={() => setActiveDeleteTicket(true)}>
-                  Delete
-                </Button>
-
-                <Button
-                  sx={{ marginLeft: '1rem' }}
-                  variant="outlined"
+                  size="small"
+                  variant="contained"
                   color="info"
-                  startIcon={<SaveOutlined />}
-                  onClick={onSaveForm}
-                  disabled={form.description.length <= 0 || !selectedBoard}
+                  startIcon={<UndoIcon />}
+                  onClick={() => navigate('/')}
+                  sx={{ fontSize: '0.8rem' }}
                 >
-                  Save
+
+                  Back
                 </Button>
-              </div>
-            </CardActions>
-          </Card>
-        </Grid>
+
+                <div>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="error"
+                    startIcon={<DeleteOutline />}
+                    onClick={() => setActiveDeleteTicket(true)}
+                    sx={{ fontSize: '0.8rem' }}
+                  >
+                    Delete
+                  </Button>
+
+                  <Button
+                    size="small"
+                    sx={{ marginLeft: '1rem', fontSize: '0.8rem' }}
+                    variant="outlined"
+                    color="info"
+                    startIcon={<SaveOutlined />}
+                    onClick={onSaveForm}
+                    disabled={form.description.length <= 0 || !selectedBoard}
+                  >
+                    Save
+                  </Button>
+                </div>
+              </CardActions>
+            </Card>
+          </Grid>
+        )}
       </Grid>
 
       {
@@ -267,7 +306,7 @@ const TicketView = () => {
           />
         )
       }
-    </Layout>
+    </div>
   )
 };
 
