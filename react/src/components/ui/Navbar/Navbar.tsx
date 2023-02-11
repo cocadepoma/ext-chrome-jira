@@ -1,9 +1,8 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
-import { Add, MenuOutlined as MenuOutlinedIcon, Dashboard, LowPriority } from '@mui/icons-material'
+import { Add, Dashboard, LowPriority } from '@mui/icons-material'
 import { AppBar, Toolbar, IconButton, Typography, Tooltip, MenuItem, Menu } from '@mui/material'
 
-import { UIContext } from '../../../contexts/ui';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
