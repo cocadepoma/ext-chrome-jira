@@ -1,14 +1,39 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
-import { DashboardCustomizeOutlined, MenuOutlined as MenuOutlinedIcon } from '@mui/icons-material'
-import { AppBar, Toolbar, IconButton, Typography, Tooltip } from '@mui/material'
+import { Add, MenuOutlined as MenuOutlinedIcon, Dashboard, LowPriority } from '@mui/icons-material'
+import { AppBar, Toolbar, IconButton, Typography, Tooltip, MenuItem, Menu } from '@mui/material'
 
 import { UIContext } from '../../../contexts/ui';
 import { useNavigate } from 'react-router-dom';
 
-export const Navbar = ({ onBoardAdd }: { onBoardAdd: () => void }) => {
-  const { openSideMenu } = useContext(UIContext);
+interface Props {
+  onOrderBoards: () => void;
+  onBoardAdd: () => void;
+}
+
+export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
   const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onAddBoardClick = () => {
+    handleClose();
+    onBoardAdd();
+  };
+
+  const onBoardsOrderClick = () => {
+    handleClose();
+    onOrderBoards();
+  };
 
   return (
     <AppBar position="fixed" elevation={0} sx={{ backgroundColor: 'rgb(255,255,255)', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem' }}>
@@ -29,18 +54,24 @@ export const Navbar = ({ onBoardAdd }: { onBoardAdd: () => void }) => {
 
 
         <div>
-          <Tooltip title="Add new board">
-            <IconButton size="small" edge="start" onClick={onBoardAdd} sx={{ marginRight: '15px' }}>
-              <DashboardCustomizeOutlined sx={{ width: '1rem', height: '1rem' }} />
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onAddBoardClick}><Add sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Add new board</MenuItem>
+            <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onBoardsOrderClick}> <LowPriority sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Order boards</MenuItem>
+          </Menu>
+
+          <Tooltip title="Boards">
+            <IconButton size="small" edge="start" onClick={handleClick}>
+              <Dashboard sx={{ width: '1rem', height: '1rem' }} />
             </IconButton>
           </Tooltip>
-
-          <Tooltip title="Open menu">
-            <IconButton size="small" edge="start" onClick={openSideMenu} >
-              <MenuOutlinedIcon />
-            </IconButton>
-          </Tooltip>
-
         </div>
 
       </Toolbar>

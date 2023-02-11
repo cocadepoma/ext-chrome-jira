@@ -61,7 +61,7 @@ export const EditEntryDialog = ({
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
         <Button color="error" variant="outlined" onClick={handleClose}>Cancel</Button>
-        <Button color="primary" variant="outlined" onClick={onSave}>Confirm</Button>
+        <Button color="info" variant="outlined" onClick={onSave}>Confirm</Button>
       </DialogActions>
     </Dialog>
   )

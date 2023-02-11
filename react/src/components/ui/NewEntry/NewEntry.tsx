@@ -53,7 +53,7 @@ export const NewEntry = () => {
               <Box display="flex" justifyContent="space-between">
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="info"
                   onClick={() => setIsAddingEntry(false)}
                 >
                   Cancelar
@@ -61,7 +61,7 @@ export const NewEntry = () => {
 
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="info"
                   endIcon={<SaveOutlined />}
                   onClick={onSave}
                 >

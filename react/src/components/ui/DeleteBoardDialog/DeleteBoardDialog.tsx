@@ -32,7 +32,7 @@ export const DeleteBoardDialog = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', padding: '1rem' }}>
-        <Button color="primary" variant="outlined" onClick={handleClose}>Cancel</Button>
+        <Button color="info" variant="outlined" onClick={handleClose}>Cancel</Button>
         <Button color="error" variant="outlined" onClick={onDelete}>Delete</Button>
       </DialogActions>
     </Dialog>

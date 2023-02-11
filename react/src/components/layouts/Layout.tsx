@@ -2,7 +2,7 @@ import { Box } from "@mui/material"
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
 import { BoardsContext } from "../../contexts/boards";
-import { Navbar, NewBoardDialog, Sidebar } from "../ui";
+import { Navbar, NewBoardDialog, OrderBoardDialog, Sidebar } from "../ui";
 
 import styles from './Layout.module.css';
 
@@ -14,6 +14,7 @@ interface Props {
 export const Layout: React.FC<Props> = ({ title = 'OpenJira', children }: Props) => {
   const { boards, addNewBoard } = useContext(BoardsContext);
   const [isNewBoardDialogOpen, setIsNewBoardDialogOpen] = useState(false);
+  const [isOrderBoardDialogOpen, setIsOrderBoardDialogOpen] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -53,17 +54,28 @@ export const Layout: React.FC<Props> = ({ title = 'OpenJira', children }: Props)
     setIsNewBoardDialogOpen(true);
   };
 
+  const onOrderBoards = () => {
+    setIsOrderBoardDialogOpen(true);
+  };
+
   return (
     <div className={styles.layout__container}>
 
-      <Navbar onBoardAdd={onBoardAdd} />
+      <Navbar onBoardAdd={onBoardAdd} onOrderBoards={onOrderBoards} />
       <Sidebar />
 
       <div className={styles['layout__content--container']}>
         {children}
       </div>
 
-
+      {
+        isOrderBoardDialogOpen && (
+          <OrderBoardDialog
+            isOpen={isOrderBoardDialogOpen}
+            handleClose={() => setIsOrderBoardDialogOpen(false)}
+          />
+        )
+      }
       {
         isNewBoardDialogOpen && (
           <NewBoardDialog
