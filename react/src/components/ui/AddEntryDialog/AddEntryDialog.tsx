@@ -43,7 +43,7 @@ export const AddEntryDialog = ({
       <DialogTitle>New ticket</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ margin: '10px 0' }}>
-          Add new Ticket to the board: <strong style={{ color: 'rgba(15, 70, 147, 0.787)' }}>{board?.name}</strong>
+          Add a new ticket to the board: <strong style={{ color: 'rgba(15, 70, 147, 0.787)' }}>{board?.name}</strong>
         </DialogContentText>
         <TextField
           className={styles['new-entry-dialog__textfield']}

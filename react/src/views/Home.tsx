@@ -1,9 +1,10 @@
+import { useSnackbar } from 'notistack';
 import { useContext, useState } from 'react'
 
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 
 import { Layout } from '../components/layouts'
-import { CardHeader, DeleteEntryDialog, EditEntryDialog, EmptyBoard, EntryList } from '../components/ui'
+import { CardHeader, DeleteBoardDialog, DeleteEntryDialog, EditBoardDialog, EditEntryDialog, EmptyBoard, EntryList, NewBoardDialog } from '../components/ui'
 import { AddEntryDialog } from '../components/ui/AddEntryDialog/AddEntryDialog';
 
 import { BoardsContext } from '../contexts/boards'
@@ -13,12 +14,18 @@ import { Category, Entry } from '../interfaces'
 import styles from '../styles/modules/Home.module.css'
 
 const Home = () => {
-  const { boards, updateEntry, updateBoards, deleteEntry } = useContext(BoardsContext);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { boards, updateEntry, updateBoards, deleteEntry, patchBoards, addNewBoard, deleteBoard } = useContext(BoardsContext);
+  const { addNewEntry } = useContext(BoardsContext);
+
   const [activeBoard, setActiveBoard] = useState<Category | null>(null);
   const [activeDeleteTicket, setActiveDeleteTicket] = useState<Entry | null>(null);
   const [activeEditTicket, setActiveEditTicket] = useState<Entry | null>(null);
+  const [isNewBoardDialogOpen, setIsNewBoardDialogOpen] = useState(false);
+  const [activeDeleteBoard, setActiveDeleteBoard] = useState<Category | null>(null);
+  const [activeEditBoard, setActiveEditBoard] = useState<Category | null>(null);
 
-  const { addNewEntry } = useContext(BoardsContext);
 
   const onDragEndHandler = (result: DropResult) => {
     const { destination, source } = result
@@ -112,16 +119,83 @@ const Home = () => {
     onCloseDeleteTicket();
   };
 
+  const handleAddNewBoard = (name: string) => {
+    setIsNewBoardDialogOpen(false);
+    const cleanedName = name.trim();
+    const boardExists = boards.find(board => board.name.toLowerCase() === cleanedName.toLowerCase());
+
+    if (cleanedName.length <= 2) {
+      enqueueSnackbar(`The board name should have at least 3 characters`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      })
+      return;
+    }
+
+    if (boardExists) {
+      enqueueSnackbar(`The board name name already exists`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      })
+      return;
+    }
+
+    addNewBoard(cleanedName);
+  };
+
+  const onBoardEdit = (board: Category) => {
+    setActiveEditBoard(board);
+  };
+
+  const handleConfirmEditBoard = (board: Category) => {
+    setActiveEditBoard(null);
+
+    if (board.name.trim().length <= 2) {
+      enqueueSnackbar(`The board name should have at least 3 characters`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      })
+      return;
+    }
+
+    updateBoards([{ ...board, name: board.name.trim() }]);
+  };
+
+  const onBoardDelete = (board: Category) => {
+    setActiveDeleteBoard(board);
+  };
+
+  const onBoardAdd = () => {
+    setIsNewBoardDialogOpen(true);
+  };
+
+  const handleConfirmDeleteBoard = (board: Category) => {
+    deleteBoard(board);
+    setActiveDeleteBoard(null);
+  };
+
   return (
-    <div style={{ height: 'calc(600px - 64px)' }}>
+    <div style={{ height: boards.length > 3 ? '543px' : '535px' }}>
       {
         boards.length === 0
 
-          ? <EmptyBoard />
+          ? <EmptyBoard onBoardAdd={onBoardAdd} />
 
           : (
-            <DragDropContext onDragEnd={onDragEndHandler}>
-              <div className={styles['home__context']} style={{ paddingRight: boards.length > 0 ? boards.length * 249 : 0 }}>
+            <div className={styles['home__context']} style={{ paddingRight: boards.length > 3 ? boards.length * 249 : 0 }}>
+              <DragDropContext onDragEnd={onDragEndHandler}>
                 {boards.map((board, i) => (
                   <div className={styles['home__board']} key={board._id}>
 
@@ -129,6 +203,8 @@ const Home = () => {
                       className={styles['home__header--container']}
                       board={board}
                       onClick={onStartAddNewEntry}
+                      onRemoveBoard={onBoardDelete}
+                      onEditBoard={onBoardEdit}
                     />
 
                     <Droppable droppableId={board._id}>
@@ -149,8 +225,8 @@ const Home = () => {
                     </Droppable>
                   </div>
                 ))}
-              </div>
-            </DragDropContext>
+              </DragDropContext>
+            </div>
           )
       }
 
@@ -183,6 +259,38 @@ const Home = () => {
             handleClose={onCloseEditTicket}
             handleConfirm={handleConfirmEditTicket}
             ticket={activeEditTicket}
+          />
+        )
+      }
+
+      {
+        isNewBoardDialogOpen && (
+          <NewBoardDialog
+            isOpen={isNewBoardDialogOpen}
+            handleClose={() => setIsNewBoardDialogOpen(false)}
+            handleConfirm={handleAddNewBoard}
+          />
+        )
+      }
+
+      {
+        activeDeleteBoard && (
+          <DeleteBoardDialog
+            isOpen={!!activeDeleteBoard}
+            handleClose={() => setActiveDeleteBoard(null)}
+            handleDelete={handleConfirmDeleteBoard}
+            board={activeDeleteBoard}
+          />
+        )
+      }
+
+      {
+        activeEditBoard && (
+          <EditBoardDialog
+            isOpen={!!activeEditBoard}
+            handleClose={() => setActiveEditBoard(null)}
+            handleConfirm={handleConfirmEditBoard}
+            board={activeEditBoard}
           />
         )
       }

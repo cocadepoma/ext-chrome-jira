@@ -76,8 +76,8 @@
 
 @media (min-width: 768px) {
   .entrycard__container {
-    min-width: 13rem;
-    max-width: 13rem;
-    width: 13rem;
+    min-width: 12.7rem;
+    max-width: 12.7rem;
+    width: 12.7rem;
   }
 }

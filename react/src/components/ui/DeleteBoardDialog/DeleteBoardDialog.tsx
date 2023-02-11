@@ -28,7 +28,7 @@ export const DeleteBoardDialog = ({
         </DialogContentText>
         <br />
         <DialogContentText style={{ marginBottom: '0.3rem', fontWeight: 'bold', textAlign: 'center' }}>
-          You will lose all the containing tickets in this board!
+          You will lose all the containing tickets on this board!
         </DialogContentText>
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', padding: '1rem' }}>

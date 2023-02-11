@@ -66,7 +66,7 @@ export const Sidebar = () => {
             <ListItemIcon sx={{ minWidth: '35px' }}>
               <DashboardCustomizeOutlined sx={{ width: '1rem', height: '1rem' }} />
             </ListItemIcon>
-            <ListItemText primary={'Edit Boards'} sx={{ '& span': { fontSize: '0.8rem' } }} />
+            <ListItemText primary={'Boards'} sx={{ '& span': { fontSize: '0.8rem' } }} />
           </ListItem>
 
         </List>

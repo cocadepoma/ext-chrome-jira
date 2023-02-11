@@ -44,8 +44,10 @@ const BoardsView = () => {
 
   const handleAddNewBoard = (name: string) => {
     setIsNewBoardDialogOpen(false);
+    const cleanedName = name.trim();
+    const boardExists = boards.find(board => board.name.toLowerCase() === cleanedName.toLowerCase());
 
-    if (name.trim().length <= 2) {
+    if (cleanedName.length <= 2) {
       enqueueSnackbar(`The board name should have at least 3 characters`, {
         variant: 'error',
         autoHideDuration: 2000,
@@ -56,7 +58,20 @@ const BoardsView = () => {
       })
       return;
     }
-    addNewBoard(name);
+
+    if (boardExists) {
+      enqueueSnackbar(`The board name name already exists`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      })
+      return;
+    }
+
+    addNewBoard(cleanedName);
   };
 
   const onBoardEdit = (board: Category) => {
@@ -78,7 +93,7 @@ const BoardsView = () => {
       return;
     }
 
-    updateBoards([board]);
+    updateBoards([{ ...board, name: board.name.trim() }]);
   };
 
   const onBoardDelete = (board: Category) => {

@@ -75,12 +75,24 @@ const TicketView = () => {
   };
 
   const onSaveForm = async () => {
-    if (!selectedBoard || form.description.trim().length === 0 || form.description.length <= 2 || !ticket) return;
+    if (!selectedBoard || !ticket) return;
+
+    if (form.description.trim().length < 1) {
+      enqueueSnackbar(`The ticket name should contain at least 1 character`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      })
+      return;
+    }
 
     const newTicket = {
       ...ticket,
-      content: form.content,
-      description: form.description,
+      content: form.content.trim(),
+      description: form.description.trim(),
       categoryId: selectedBoard._id,
       color
     };
@@ -161,12 +173,12 @@ const TicketView = () => {
       >
         {ticket && (
           <Grid item sx={{ width: '59%' }}>
-            <Card>
+            <Card sx={{ backgroundColor: '#e8e8e8' }}>
               <CardHeader
                 sx={{ padding: '10px 16px 0 16px' }}
                 title={`Ticket: ${form.description.length > 35 ? form.description.substring(0, 35) + ' ...' : form.description}`}
                 subheader={`Created ${getTicketTime(ticket.createdAt)}`}
-                titleTypographyProps={{ style: { fontSize: '0.8rem' } }}
+                titleTypographyProps={{ style: { fontSize: '0.8rem', color: 'rgba(15, 70, 147, 0.787)', fontWeight: 'bold' } }}
                 subheaderTypographyProps={{ style: { fontSize: '0.6rem' } }}
               />
 
@@ -175,7 +187,7 @@ const TicketView = () => {
                 <TextField
                   sx={{
                     marginBottom: '14px', fontSize: 10,
-                    '& .MuiInputBase-root': { padding: '8.5px 14px' },
+                    '& .MuiInputBase-root': { padding: '8.5px 14px', backgroundColor: '#ffffff8a' },
                     '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-4px', left: '2px' },
                     '& .MuiFormLabel-root.MuiInputLabel-shrink': { top: '2px' },
                   }}
@@ -194,13 +206,9 @@ const TicketView = () => {
                 <FormControl fullWidth>
                   <Autocomplete
                     sx={{
-                      '& .MuiInputBase-root': {
-                        padding: '4px 10px'
-                      },
+                      '& .MuiInputBase-root': { padding: '4px 10px', backgroundColor: '#ffffff8a' },
                       '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-3px', left: '2px' },
-                      '& .MuiInputLabel-root.MuiInputLabel-shrink': {
-                        top: '2px'
-                      },
+                      '& .MuiInputLabel-root.MuiInputLabel-shrink': { top: '2px' },
                     }}
                     ListboxProps={{ style: { fontSize: '0.8rem' } }}
                     clearOnEscape
@@ -224,8 +232,9 @@ const TicketView = () => {
 
                 <TextField
                   sx={{
-                    marginBottom:
-                      '14px', marginTop: '14px',
+                    marginBottom: '14px',
+                    marginTop: '14px',
+                    '& .MuiInputBase-root': { backgroundColor: '#ffffff8a' },
                     '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-3px', left: '2px' },
                     '& .MuiInputLabel-root.MuiInputLabel-shrink': {
                       top: '2px'
@@ -274,14 +283,14 @@ const TicketView = () => {
                     color="error"
                     startIcon={<DeleteOutline />}
                     onClick={() => setActiveDeleteTicket(true)}
-                    sx={{ fontSize: '0.8rem' }}
+                    sx={{ fontSize: '0.8rem', backgroundColor: '#ffffff8a' }}
                   >
                     Delete
                   </Button>
 
                   <Button
                     size="small"
-                    sx={{ marginLeft: '1rem', fontSize: '0.8rem' }}
+                    sx={{ marginLeft: '1rem', fontSize: '0.8rem', backgroundColor: '#ffffff8a' }}
                     variant="outlined"
                     color="info"
                     startIcon={<SaveOutlined />}

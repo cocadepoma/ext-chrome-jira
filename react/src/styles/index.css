@@ -1,12 +1,12 @@
 @import './globals.css';
 
 html {
-  width: 800px;
+  height: 586px;
 }
 
-html,
 body,
 #root {
-  height: 586px;
+  height: 554px;
+  width: 100%;
   min-width: 800px;
 }

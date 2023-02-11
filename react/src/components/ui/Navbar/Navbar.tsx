@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 
-import { MenuOutlined as MenuOutlinedIcon } from '@mui/icons-material'
-import { AppBar, Toolbar, IconButton, Typography, Link } from '@mui/material'
+import { DashboardCustomizeOutlined, MenuOutlined as MenuOutlinedIcon } from '@mui/icons-material'
+import { AppBar, Toolbar, IconButton, Typography, Tooltip } from '@mui/material'
 
 import { UIContext } from '../../../contexts/ui';
 import { useNavigate } from 'react-router-dom';
 
-export const Navbar = () => {
+export const Navbar = ({ onBoardAdd }: { onBoardAdd: () => void }) => {
   const { openSideMenu } = useContext(UIContext);
   const navigate = useNavigate();
 
@@ -28,9 +28,20 @@ export const Navbar = () => {
         </div>
 
 
-        <IconButton size="small" edge="start" onClick={openSideMenu} >
-          <MenuOutlinedIcon />
-        </IconButton>
+        <div>
+          <Tooltip title="Add new board">
+            <IconButton size="small" edge="start" onClick={onBoardAdd} sx={{ marginRight: '15px' }}>
+              <DashboardCustomizeOutlined sx={{ width: '1rem', height: '1rem' }} />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Open menu">
+            <IconButton size="small" edge="start" onClick={openSideMenu} >
+              <MenuOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+
+        </div>
 
       </Toolbar>
     </AppBar>

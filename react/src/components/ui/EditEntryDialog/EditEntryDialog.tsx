@@ -25,11 +25,11 @@ export const EditEntryDialog = ({
   };
 
   const onSave = () => {
-    if (!inputValue.length) return;
+    if (!inputValue.trim().length) return;
 
     const updatedTicket = {
       ...ticket,
-      description: inputValue
+      description: inputValue.trim(),
     } as Entry;
 
     handleConfirm(updatedTicket);
