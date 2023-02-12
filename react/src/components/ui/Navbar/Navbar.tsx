@@ -5,6 +5,7 @@ import { AppBar, Toolbar, IconButton, Typography, Tooltip, MenuItem, Menu } from
 
 import { useNavigate } from 'react-router-dom';
 
+import img from '../../../img/128.png';
 interface Props {
   onOrderBoards: () => void;
   onBoardAdd: () => void;
@@ -40,17 +41,16 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <img
-            src="https://res.cloudinary.com/diwcrqh9i/image/upload/v1668332527/logos/logo_yox9pw.png"
+            src={img}
             alt="logo"
-            width={20}
-            height={20}
+            width={23}
+            height={23}
             onClick={() => navigate('/')}
-            style={{ cursor: 'pointer', transform: 'scaleX(-1)' }}
+            style={{ cursor: 'pointer', filter: 'drop-shadow(3px 2px 3px rgba(0,0,0,0.4))' }}
           />
 
-          <Typography variant="h6" sx={{ color: 'rgba(0,0,0,0.7)', fontSize: '1rem' }}>LibreJira</Typography>
+          <Typography variant="h6" sx={{ color: 'rgba(0,0,0,0.7)', fontSize: '1rem' }}>Reminder</Typography>
         </div>
-
 
         <div>
           <Menu
@@ -66,7 +66,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onBoardsOrderClick}> <LowPriority sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Order boards</MenuItem>
           </Menu>
 
-          <Tooltip title="Boards">
+          <Tooltip title="Board options">
             <IconButton size="small" edge="start" onClick={handleClick}>
               <Dashboard sx={{ width: '1rem', height: '1rem' }} />
             </IconButton>

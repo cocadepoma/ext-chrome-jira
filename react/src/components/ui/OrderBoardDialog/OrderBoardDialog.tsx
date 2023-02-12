@@ -84,7 +84,7 @@ export const OrderBoardDialog = ({
         </DragDropContext>
       </DialogContent>
 
-      <DialogActions style={{ display: 'flex', marginTop: '1rem', padding: '1.1rem' }}>
+      <DialogActions style={{ display: 'flex', padding: '0 1.1rem 1.1rem 1.1rem' }}>
         <Button color="info" variant="outlined" onClick={handleClose}>Close</Button>
       </DialogActions>
 

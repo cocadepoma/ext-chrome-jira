@@ -9,7 +9,6 @@
   }
 }
 
-
 .order-boards__context {
   display: flex;
   flex-direction: column;
@@ -25,9 +24,8 @@
   justify-content: space-between;
   align-items: center;
   width: 94%;
-  padding: 0rem 1rem;
-  margin: 1rem auto 0 auto;
-  background-color: rgb(255, 255, 255);
+  padding: 0rem 1rem 0.5rem 1rem;
+  background-color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }

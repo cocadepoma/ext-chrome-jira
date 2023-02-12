@@ -19,7 +19,7 @@ export const CardHeader = ({ className = '', board, onClick, onRemoveBoard, onEd
     <div className={className}>
       <h4>{board.name}</h4>
 
-      <Tooltip title="Edit board">
+      <Tooltip title="Edit board name">
         <IconButton sx={{ width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onEditBoard(board)}>
           <EditIcon fontSize="small" />
         </IconButton>

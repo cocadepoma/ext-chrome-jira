@@ -1,5 +1,5 @@
 {
-  "name": "Trello",
+  "name": "Reminder",
   "description": "Tidy your mind!",
   "version": "1.1.0",
   "manifest_version": 3,
@@ -7,7 +7,7 @@
     "storage"
   ],
   "action": {
-    "default_title": "Trello",
+    "default_title": "Reminder",
     "default_popup": "index.html"
   },
   "icons": {

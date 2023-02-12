@@ -54,6 +54,7 @@ const TicketView = () => {
     const ticket = board.tickets.find(tk => tk._id === ticketId)!;
     setSelectedBoard(board);
 
+    setColor(ticket.color || 'rgba(0,0,0,.5)');
     setTicket(ticket);
     setForm({ description: ticket.description, content: ticket.content || '' });
   };
@@ -260,7 +261,9 @@ const TicketView = () => {
                     display: 'inline-block',
                   }} />
                 </Typography>
-                <GithubPicker color={color} onChangeComplete={onColorChange} />
+                <GithubPicker color={color} onChangeComplete={onColorChange} colors={
+                  ['#f44336', '#e81e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722']
+                } />
               </CardContent>
 
               <CardActions sx={{ display: 'flex', justifyContent: 'space-between', padding: 2 }}>

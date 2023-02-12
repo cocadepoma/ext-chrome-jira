@@ -48,7 +48,7 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
 
               <p className={styles.entrycard__text}><LabelTwoToneIcon style={{ color: entry.color || 'rgba(0,0,0,.5)' }} fontSize="small" /> {entry.description}</p>
 
-              <div className={styles['entrycard__buttons--container']}>
+              {/* <div className={styles['entrycard__buttons--container']}>
                 <IconButton
                   className={styles['entrycard__button--edit']}
                   onClick={onEdit}
@@ -63,7 +63,7 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
                   <DeleteOutlineIcon fontSize="small" />
                 </IconButton>
 
-              </div>
+              </div> */}
 
             </div>
 
