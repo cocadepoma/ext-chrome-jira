@@ -170,7 +170,7 @@ const TicketView = () => {
       <Grid
         container
         justifyContent="center"
-        sx={{ marginTop: '25px', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
+        sx={{ marginTop: '33px', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
       >
         {ticket && (
           <Grid item sx={{ width: '59%' }}>
@@ -194,6 +194,7 @@ const TicketView = () => {
                   }}
                   fullWidth
                   multiline
+                  rows={2}
                   maxRows={2}
                   label="Name"
                   name="description"
