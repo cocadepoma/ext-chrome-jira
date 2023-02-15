@@ -66,8 +66,9 @@ export const OrderBoardDialog = ({
                               {...draggableProvided.draggableProps}
                               {...draggableProvided.dragHandleProps}
                               ref={draggableProvided.innerRef}
+
                             >
-                              <div className={styles['order-boards____actions--container']}>
+                              <div className={styles['order-boards____actions--container']} style={{ backgroundColor: board.color || 'rgb(255,255,255)', color: 'red' }}>
                                 <p><span style={{ fontWeight: 'bold' }}>{index + 1}</span> - {board.name}</p>
 
                               </div>
@@ -85,7 +86,7 @@ export const OrderBoardDialog = ({
       </DialogContent>
 
       <DialogActions style={{ display: 'flex', padding: '0 1.1rem 1.1rem 1.1rem' }}>
-        <Button color="info" variant="outlined" onClick={handleClose}>Close</Button>
+        <Button color="info" variant="contained" onClick={handleClose}>Close</Button>
       </DialogActions>
 
     </Dialog>

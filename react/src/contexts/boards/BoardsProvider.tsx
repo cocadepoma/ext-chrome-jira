@@ -31,8 +31,6 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
       if (!categories) return;
 
       dispatch({ type: '[Boards] - Load data', payload: categories });
-
-      // dispatch({ type: '[Boards] - Load data', payload: mock });
     } catch (error) {
       console.log(error, 'An error ocurred while getting the Boards');
     }
@@ -96,6 +94,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         tickets: [],
         createdAt: Date.now(),
         indexOrder: !state.boards.length ? 0 : state.boards.length,
+        color: 'rgba(255,255,255,1)'
       };
 
       const updatedBoards = [...state.boards, newBoard];
@@ -138,7 +137,6 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const patchBoards = async (boards: Category[]) => {
     try {
-
       dispatch({ type: '[Boards] - Load data', payload: boards });
 
       await chrome.storage.sync.set({ categories: boards });

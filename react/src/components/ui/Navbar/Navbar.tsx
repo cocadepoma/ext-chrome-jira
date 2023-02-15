@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Add, Dashboard, LowPriority } from '@mui/icons-material'
 import { AppBar, Toolbar, IconButton, Typography, Tooltip, MenuItem, Menu } from '@mui/material'
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import img from '../../../img/128.png';
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
 
 export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -46,10 +47,10 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             width={23}
             height={23}
             onClick={() => navigate('/')}
-            style={{ cursor: 'pointer', filter: 'drop-shadow(3px 2px 3px rgba(0,0,0,0.4))' }}
+            style={{ cursor: 'pointer', filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 1px 1px 3px)' }}
           />
 
-          <Typography variant="h6" sx={{ color: 'rgba(0,0,0,0.7)', fontSize: '1rem' }}>Reminder</Typography>
+          <Typography variant="h6" sx={{ color: 'rgba(0,0,0,0.7)', fontSize: '1rem' }}>Kanbanify</Typography>
         </div>
 
         <div>
@@ -66,11 +67,15 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onBoardsOrderClick}> <LowPriority sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Order boards</MenuItem>
           </Menu>
 
-          <Tooltip title="Board options">
-            <IconButton size="small" edge="start" onClick={handleClick}>
-              <Dashboard sx={{ width: '1rem', height: '1rem' }} />
-            </IconButton>
-          </Tooltip>
+          {
+            location.pathname === '/' && (
+              <Tooltip title="Board options">
+                <IconButton size="small" edge="start" onClick={handleClick}>
+                  <Dashboard sx={{ width: '1rem', height: '1rem' }} />
+                </IconButton>
+              </Tooltip>
+            )
+          }
         </div>
 
       </Toolbar>

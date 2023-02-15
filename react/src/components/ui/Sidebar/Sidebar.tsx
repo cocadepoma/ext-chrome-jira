@@ -36,7 +36,7 @@ export const Sidebar = () => {
     >
       <Box sx={{ width: '160px', }}>
         <Box sx={{ padding: '5px 10px', textAlign: 'center', margin: '1rem 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
-          <Typography variant="body1">Reminder</Typography>
+          <Typography variant="body1">Kanbanify</Typography>
           <img
             src="https://res.cloudinary.com/diwcrqh9i/image/upload/v1668332527/logos/logo_yox9pw.png"
             alt="logo"

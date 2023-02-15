@@ -1,5 +1,5 @@
 {
-  "name": "Reminder",
+  "name": "Kanbanify",
   "description": "Application for keeping you notes tidy and organized",
   "version": "1.0.0",
   "manifest_version": 3,
@@ -7,7 +7,7 @@
     "storage"
   ],
   "action": {
-    "default_title": "Reminder",
+    "default_title": "Kanbanify",
     "default_popup": "index.html"
   },
   "icons": {

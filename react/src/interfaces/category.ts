@@ -6,4 +6,5 @@ export interface Category {
   tickets: Entry[] | [];
   createdAt: number;
   indexOrder: number;
+  color?: string;
 }

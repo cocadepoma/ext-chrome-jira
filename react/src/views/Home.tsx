@@ -3,7 +3,6 @@ import { useContext, useState } from 'react'
 
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 
-import { Layout } from '../components/layouts'
 import { CardHeader, DeleteBoardDialog, DeleteEntryDialog, EditBoardDialog, EditEntryDialog, EmptyBoard, EntryList, NewBoardDialog } from '../components/ui'
 import { AddEntryDialog } from '../components/ui/AddEntryDialog/AddEntryDialog';
 
@@ -16,7 +15,7 @@ import styles from '../styles/modules/Home.module.css'
 const Home = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { boards, updateEntry, updateBoards, deleteEntry, patchBoards, addNewBoard, deleteBoard } = useContext(BoardsContext);
+  const { boards, updateEntry, updateBoards, deleteEntry, addNewBoard, deleteBoard } = useContext(BoardsContext);
   const { addNewEntry } = useContext(BoardsContext);
 
   const [activeBoard, setActiveBoard] = useState<Category | null>(null);
