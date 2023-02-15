@@ -76,7 +76,7 @@ export const EditBoardDialog = ({
         }} />
       </Typography>
       <GithubPicker color={color} onChangeComplete={onColorChange} colors={
-        ['rgb(255,255,255)', 'rgb(250 192 192 / 42%)', 'rgb(242 218 164 / 42%)', 'rgb(235 242 164 / 42%)', 'rgb(168 242 164 / 42%)', 'rgb(164 242 231 / 42%)', 'rgb(164 205 242 / 42%)', 'rgb(164 174 242 / 42%)', 'rgb(189 164 242 / 42%)', 'rgb(240 164 242 / 42%)']
+        ['rgb(255, 255, 255)', 'rgb(248, 211, 211)', 'rgb(242, 221, 173)', 'rgb(243, 242, 193)', 'rgb(207, 243, 193)', 'rgb(193, 243, 232)', 'rgb(193, 230, 243)', 'rgb(193, 202, 243)', 'rgb(222, 193, 243)', 'rgb(243, 193, 236)']
       } />
 
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
