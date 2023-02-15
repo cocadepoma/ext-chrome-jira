@@ -16,7 +16,7 @@ interface Props {
 
 export const CardHeader = ({ className = '', board, onClick, onRemoveBoard, onEditBoard }: Props) => {
   return (
-    <div className={className} style={{ backgroundColor: board.color || 'rgb(255,255,255)' }}>
+    <div className={className} style={{ backgroundColor: board.color || '#ffffff' }}>
       <h4>{board.name}</h4>
 
       <Tooltip title="Edit board name">

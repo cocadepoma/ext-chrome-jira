@@ -37,7 +37,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
   };
 
   return (
-    <AppBar position="fixed" elevation={0} sx={{ backgroundColor: 'rgb(255,255,255)', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem' }}>
+    <AppBar position="fixed" elevation={0} sx={{ backgroundColor: '#ffffff', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', boxShadow: '2px 2px 5px -1px rgba(0,0,0,0.5)', minHeight: '2rem!important' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

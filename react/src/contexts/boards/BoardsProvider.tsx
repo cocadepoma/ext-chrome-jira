@@ -86,7 +86,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
     }
   };
 
-  const addNewBoard = async (name: string) => {
+  const addNewBoard = async (name: string, color: string) => {
     try {
       const newBoard: Category = {
         _id: uuidv4(),
@@ -94,7 +94,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         tickets: [],
         createdAt: Date.now(),
         indexOrder: !state.boards.length ? 0 : state.boards.length,
-        color: 'rgba(255,255,255,1)'
+        color,
       };
 
       const updatedBoards = [...state.boards, newBoard];

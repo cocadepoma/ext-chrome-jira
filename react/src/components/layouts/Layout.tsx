@@ -18,22 +18,9 @@ export const Layout: React.FC<Props> = ({ title = 'OpenJira', children }: Props)
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleAddNewBoard = (name: string) => {
+  const handleAddNewBoard = (name: string, color: string) => {
     setIsNewBoardDialogOpen(false);
-    const cleanedName = name.trim();
-    const boardExists = boards.find(board => board.name.toLowerCase() === cleanedName.toLowerCase());
-
-    if (cleanedName.length <= 2) {
-      enqueueSnackbar(`The board name should have at least 3 characters`, {
-        variant: 'error',
-        autoHideDuration: 2000,
-        anchorOrigin: {
-          horizontal: 'right',
-          vertical: 'bottom'
-        }
-      })
-      return;
-    }
+    const boardExists = boards.find(board => board.name.toLowerCase() === name.toLowerCase());
 
     if (boardExists) {
       enqueueSnackbar(`The board name name already exists`, {
@@ -47,7 +34,7 @@ export const Layout: React.FC<Props> = ({ title = 'OpenJira', children }: Props)
       return;
     }
 
-    addNewBoard(cleanedName);
+    addNewBoard(name, color);
   };
 
   const onBoardAdd = () => {

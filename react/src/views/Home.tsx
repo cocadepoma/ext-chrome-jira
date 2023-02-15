@@ -118,7 +118,7 @@ const Home = () => {
     onCloseDeleteTicket();
   };
 
-  const handleAddNewBoard = (name: string) => {
+  const handleAddNewBoard = (name: string, color: string) => {
     setIsNewBoardDialogOpen(false);
     const cleanedName = name.trim();
     const boardExists = boards.find(board => board.name.toLowerCase() === cleanedName.toLowerCase());
@@ -147,7 +147,7 @@ const Home = () => {
       return;
     }
 
-    addNewBoard(cleanedName);
+    addNewBoard(cleanedName, color);
   };
 
   const onBoardEdit = (board: Category) => {

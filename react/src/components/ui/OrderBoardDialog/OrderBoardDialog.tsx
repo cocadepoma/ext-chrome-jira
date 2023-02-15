@@ -68,7 +68,7 @@ export const OrderBoardDialog = ({
                               ref={draggableProvided.innerRef}
 
                             >
-                              <div className={styles['order-boards____actions--container']} style={{ backgroundColor: board.color || 'rgb(255,255,255)', color: 'red' }}>
+                              <div className={styles['order-boards____actions--container']} style={{ backgroundColor: board.color || '#ffffff', color: 'red' }}>
                                 <p><span style={{ fontWeight: 'bold' }}>{index + 1}</span> - {board.name}</p>
 
                               </div>
