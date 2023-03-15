@@ -24,12 +24,26 @@ export const NewBoardDialog = ({
   const [color, setColor] = useState<string>('rgb(255,255,255)');
 
   const onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsTouched(true);
     setInputValue(event.target.value);
   };
 
   const onSave = () => {
     if (inputValue.trim().length <= 2) {
       enqueueSnackbar(`The board name should have at least 3 characters`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
+
+      return;
+    }
+
+    if (inputValue.trim().length > 20) {
+      enqueueSnackbar(`The board name it is too large`, {
         variant: 'error',
         autoHideDuration: 2000,
         anchorOrigin: {
@@ -51,7 +65,6 @@ export const NewBoardDialog = ({
   };
 
   const onColorChange = (e: ColorResult) => {
-    console.log(e,)
     setColor(e.hex);
   };
 
@@ -65,12 +78,12 @@ export const NewBoardDialog = ({
           autoFocus
           multiline
           label="Board name"
-          helperText={inputValue.length <= 0 && isTouched && "Insert a value"}
-          error={inputValue.length <= 0 && isTouched}
+          helperText={inputValue.length <= 0 && isTouched && "Insert a value" || inputValue.length > 20 && isTouched && "Name too large"}
+          error={isTouched && (inputValue.length <= 0 || inputValue.length > 20)}
           value={inputValue}
           onChange={onTextChange}
           onBlur={() => setIsTouched(true)}
-          sx={{ marginBottom: '1rem' }}
+          sx={{ marginBottom: '1rem', height: '4.5rem' }}
         />
       </DialogContent>
 
@@ -89,7 +102,7 @@ export const NewBoardDialog = ({
       } />
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
         <Button color="error" variant="outlined" onClick={handleClose}>Cancel</Button>
-        <Button color="info" variant="outlined" onClick={onSave}>Confirm</Button>
+        <Button disabled={!isTouched || (inputValue.length <= 0 || inputValue.length > 20)} color="info" variant="outlined" onClick={onSave}>Confirm</Button>
       </DialogActions>
     </Dialog>
   )

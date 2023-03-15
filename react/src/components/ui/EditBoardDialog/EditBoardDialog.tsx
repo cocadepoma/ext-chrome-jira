@@ -1,6 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from "@mui/material"
 import { ChangeEvent, useState } from "react";
 import { ColorResult, GithubPicker } from "react-color";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from "@mui/material"
+import { useSnackbar } from "notistack";
+
 import { Category } from "../../../interfaces";
 
 import styles from './EditBoardDialog.module.css';
@@ -22,12 +24,39 @@ export const EditBoardDialog = ({
   const [isTouched, setIsTouched] = useState(false);
   const [color, setColor] = useState<string>(board?.color || '#ffffff');
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsTouched(true);
     setInputValue(event.target.value);
   };
 
   const onSave = () => {
-    if (!inputValue.length) return;
+    if (inputValue.trim().length <= 2) {
+      enqueueSnackbar(`The board name should have at least 3 characters`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
+
+      return;
+    }
+
+    if (inputValue.trim().length > 20) {
+      enqueueSnackbar(`The board name it is too large`, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
+
+      return;
+    }
 
     handleConfirm({
       ...board!,
@@ -56,12 +85,12 @@ export const EditBoardDialog = ({
           fullWidth
           autoFocus
           label="Board name"
-          helperText={inputValue.length <= 0 && isTouched && "Insert a value"}
-          error={inputValue.length <= 0 && isTouched}
+          helperText={inputValue.length <= 0 && isTouched && "Insert a value" || inputValue.length > 20 && isTouched && "Name too large"}
+          error={isTouched && (inputValue.length <= 0 || inputValue.length > 20)}
           value={inputValue}
           onChange={onTextChange}
           onBlur={() => setIsTouched(true)}
-          sx={{ marginBottom: '1rem' }}
+          sx={{ marginBottom: '1rem', height: '4.5rem' }}
         />
       </DialogContent>
 
@@ -81,7 +110,7 @@ export const EditBoardDialog = ({
 
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
         <Button color="error" variant="outlined" onClick={handleClose}>Cancel</Button>
-        <Button color="info" variant="outlined" onClick={onSave}>Confirm</Button>
+        <Button disabled={!isTouched || (inputValue.length <= 0 || inputValue.length > 20)} color="info" variant="outlined" onClick={onSave}>Confirm</Button>
       </DialogActions>
     </Dialog>
   )

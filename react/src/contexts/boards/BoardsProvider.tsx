@@ -130,6 +130,16 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
       dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
 
       await chrome.storage.sync.set({ categories: updatedBoards });
+
+      enqueueSnackbar(`Board updated succesfully`, {
+        variant: 'success',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
+
     } catch (error) {
       console.log({ error });
     }
