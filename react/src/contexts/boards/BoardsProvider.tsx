@@ -6,11 +6,13 @@ import { Category, Entry } from '../../interfaces';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { UserResponse } from '../../interfaces/user';
+import { sleep } from '../../utils';
 
 export interface BoardsState {
   boards: Category[];
   userName: null | string;
   userId: null | string;
+  isLoading: boolean;
 }
 
 interface BoardsProviderProps {
@@ -21,11 +23,11 @@ const Boards_INITIAL_STATE: BoardsState = {
   boards: [],
   userName: null,
   userId: null,
+  isLoading: true,
 };
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_API;
 
-console.log(import.meta.env.VITE_BASE_API)
 export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(boardsReducer, Boards_INITIAL_STATE);
   const { enqueueSnackbar } = useSnackbar();
@@ -34,24 +36,32 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
     getUserCredentials();
   }, []);
 
-  const getUserCredentials = () => {
-    chrome.identity.getProfileUserInfo(function (userInfo) {
-      if (userInfo.email) {
-        dispatch({ type: '[Boards] - Authentication', payload: userInfo });
-        loadBoards(userInfo);
-      }
-    });
+  const getUserCredentials = async () => {
+    try {
+      chrome.identity.getProfileUserInfo(async function (userInfo) {
+        if (userInfo.email && userInfo.id) {
+          dispatch({ type: '[Boards] - Authentication', payload: userInfo });
+          await loadBoards(userInfo);
+        }
+      });
+    } catch (error) {
+      console.warn(error);
+      dispatch({ type: '[Boards] - Set Loading', payload: false });
+    }
 
-    // loadBoards({ email: 'pacors88@gmail.com', id: '2131231241234124' });
-    // dispatch({ type: '[Boards] - Authentication', payload: { email: 'pacors88@gmail.com', id: '2131231241234124' } });
+    // For local tests
+    // loadBoards({ email: 'myemail@gmail.com', id: '123' });
+    // dispatch({ type: '[Boards] - Authentication', payload: { email: 'myemail@gmail.com', id: '123' } });
   };
 
-  const loadBoards = async ({ email = 'pacors88@gmail.com', id = '2131231241234124' }: { email: string, id: string }) => {
+  const loadBoards = async ({ email, id }: { email: string, id: string }) => {
     try {
       const resp = await axios.post<UserResponse>('/api/users', { email, id });
       if (!resp.data) return;
 
       dispatch({ type: '[Boards] - Load data', payload: resp.data.boards });
+      await sleep(150);
+      dispatch({ type: '[Boards] - Set Loading', payload: false });
     } catch (error) {
       console.log(error, 'An error ocurred while getting the Boards');
     }

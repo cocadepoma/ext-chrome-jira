@@ -18,3 +18,5 @@ export const getTicketTime = (time: number) => {
     return 'just now';
   }
 }
+export const sleep = (value: number) =>
+  new Promise(resolve => setTimeout(resolve, value));

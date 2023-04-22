@@ -10,3 +10,13 @@ body,
   width: 100%;
   min-width: 800px;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

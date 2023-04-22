@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, CircularProgress } from "@mui/material"
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
 import { BoardsContext } from "../../contexts/boards";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Layout: React.FC<Props> = ({ title = 'OpenJira', children }: Props) => {
-  const { userName, boards, addNewBoard } = useContext(BoardsContext);
+  const { isLoading, userName, boards, addNewBoard } = useContext(BoardsContext);
   const [isNewBoardDialogOpen, setIsNewBoardDialogOpen] = useState(false);
   const [isOrderBoardDialogOpen, setIsOrderBoardDialogOpen] = useState(false);
 
@@ -47,44 +47,56 @@ export const Layout: React.FC<Props> = ({ title = 'OpenJira', children }: Props)
 
   return (
     <div className={styles.layout__container}>
-
       {
-        userName
+        !isLoading
           ? (
             <>
-              <Navbar onBoardAdd={onBoardAdd} onOrderBoards={onOrderBoards} />
-              <Sidebar />
-
-              <div className={styles['layout__content--container']}>
-                {children}
-              </div>
-
               {
-                isOrderBoardDialogOpen && (
-                  <OrderBoardDialog
-                    isOpen={isOrderBoardDialogOpen}
-                    handleClose={() => setIsOrderBoardDialogOpen(false)}
-                  />
-                )
-              }
-              {
-                isNewBoardDialogOpen && (
-                  <NewBoardDialog
-                    isOpen={isNewBoardDialogOpen}
-                    handleClose={() => setIsNewBoardDialogOpen(false)}
-                    handleConfirm={handleAddNewBoard}
-                  />
-                )
+                userName
+                  ? (
+                    <>
+                      <Navbar onBoardAdd={onBoardAdd} onOrderBoards={onOrderBoards} />
+                      <Sidebar />
+
+                      <div className={styles['layout__content--container']}>
+                        {children}
+                      </div>
+
+                      {
+                        isOrderBoardDialogOpen && (
+                          <OrderBoardDialog
+                            isOpen={isOrderBoardDialogOpen}
+                            handleClose={() => setIsOrderBoardDialogOpen(false)}
+                          />
+                        )
+                      }
+                      {
+                        isNewBoardDialogOpen && (
+                          <NewBoardDialog
+                            isOpen={isNewBoardDialogOpen}
+                            handleClose={() => setIsNewBoardDialogOpen(false)}
+                            handleConfirm={handleAddNewBoard}
+                          />
+                        )
+                      }
+                    </>
+                  )
+
+                  : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <h1>Non authenticated users can not use Kanbanify</h1>
+                    </div>
+                  )
               }
             </>
           )
-
           : (
             <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <h1>Non authenticated users can not use Kanbanify</h1>
+              <CircularProgress color="info" />
             </div>
           )
       }
+
 
     </div>
   )

@@ -186,7 +186,7 @@ const Home = () => {
   };
 
   return (
-    <div style={{ height: boards.length > 3 ? '543px' : '535px' }}>
+    <div style={{ height: boards.length > 3 ? '543px' : '535px', animation: 'fadeIn 0.3s' }}>
       {
         boards.length === 0
 

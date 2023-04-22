@@ -8,6 +8,7 @@ type BoardsActionType =
   | { type: '[Boards] - Update Boards', payload: Category[] }
   | { type: '[Boards] - Add Board', payload: Category }
   | { type: '[Boards] - Remove Board', payload: Category }
+  | { type: '[Boards] - Set Loading', payload: boolean };
 
 export const boardsReducer = (state: BoardsState, action: BoardsActionType): BoardsState => {
   switch (action.type) {
@@ -76,6 +77,12 @@ export const boardsReducer = (state: BoardsState, action: BoardsActionType): Boa
         userName: action.payload.email
       };
 
+    case '[Boards] - Set Loading': {
+      return {
+        ...state,
+        isLoading: action.payload
+      }
+    }
     default:
       return state;
   }
