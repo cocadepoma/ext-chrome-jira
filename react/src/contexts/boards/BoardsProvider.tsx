@@ -56,10 +56,18 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const loadBoards = async ({ email, id }: { email: string, id: string }) => {
     try {
+      const { categories = [] as Category[] } = await chrome.storage.sync.get(null);
       const resp = await axios.post<UserResponse>('/api/users', { email, id });
-      if (!resp.data) return;
 
-      dispatch({ type: '[Boards] - Load data', payload: resp.data.boards });
+      if (categories.length > 0) {
+        await axios.post<UserResponse>(`/api/users/${resp.data.uid}`, { boards: categories });
+        chrome.storage.sync.clear();
+
+        dispatch({ type: '[Boards] - Load data', payload: categories });
+      } else {
+        dispatch({ type: '[Boards] - Load data', payload: categories });
+      }
+
       await sleep(150);
       dispatch({ type: '[Boards] - Set Loading', payload: false });
     } catch (error) {
