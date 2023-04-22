@@ -18,7 +18,7 @@ app.post('/api/users', async (req: Request, res: Response) => {
   const { email = '', id = '' } = req.body;
 
   if (!email || !id) {
-    res.status(400).json({ message: 'Missing email or id params' });
+    return res.status(400).json({ message: 'Missing email or id params' });
   }
 
   try {
@@ -33,8 +33,7 @@ app.post('/api/users', async (req: Request, res: Response) => {
         categories: [],
       });
       const savedUser = await newUser.save();
-      res.status(201).json(savedUser);
-      return;
+      return res.status(201).json(savedUser);
     }
 
     res.status(200).json(existingUser);
