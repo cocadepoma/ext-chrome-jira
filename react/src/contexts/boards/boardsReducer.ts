@@ -3,7 +3,7 @@ import { BoardsState } from '.';
 
 type BoardsActionType =
   | { type: '[Boards] - Add-Entry', payload: Entry }
-  | { type: '[Boards] - Entry-Updated', payload: Entry }
+  | { type: '[Boards] - Authentication', payload: { email: string, id: string } }
   | { type: '[Boards] - Load data', payload: Category[] }
   | { type: '[Boards] - Update Boards', payload: Category[] }
   | { type: '[Boards] - Add Board', payload: Category }
@@ -31,6 +31,7 @@ export const boardsReducer = (state: BoardsState, action: BoardsActionType): Boa
       const sortedBoards = updatedBoards.sort((a, b) => a.indexOrder - b.indexOrder);
 
       return {
+        ...state,
         boards: sortedBoards
       }
 
@@ -68,18 +69,12 @@ export const boardsReducer = (state: BoardsState, action: BoardsActionType): Boa
         boards: refreshedSortedIndexBoards
       };
 
-    // case '[Boards] - Entry-Updated':
-    //   return {
-    //     ...state,
-    //     boards: state.boards.map(entry => {
-    //       if (entry._id === action.payload._id) {
-    //         entry.status = action.payload.status;
-    //         entry.description = action.payload.description;
-    //       }
-
-    //       return entry;
-    //     }),
-    //   };
+    case '[Boards] - Authentication':
+      return {
+        ...state,
+        userId: action.payload.id,
+        userName: action.payload.email
+      };
 
     default:
       return state;

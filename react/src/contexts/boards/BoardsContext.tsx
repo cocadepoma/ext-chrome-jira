@@ -3,6 +3,8 @@ import { Category, Entry } from '../../interfaces';
 
 export interface ContextProps {
   boards: Category[];
+  userId: null | string;
+  userName: null | string;
 
   addNewEntry: (description: string, boardId: string) => Promise<void>;
   updateEntry: (entry: Entry, showSnack?: boolean) => Promise<void>;

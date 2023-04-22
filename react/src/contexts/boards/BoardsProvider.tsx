@@ -4,9 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { BoardsContext, boardsReducer } from '.';
 import { Category, Entry } from '../../interfaces';
 import { useSnackbar } from 'notistack';
+import axios from 'axios';
+import { UserResponse } from '../../interfaces/user';
 
 export interface BoardsState {
   boards: Category[];
+  userName: null | string;
+  userId: null | string;
 }
 
 interface BoardsProviderProps {
@@ -15,22 +19,39 @@ interface BoardsProviderProps {
 
 const Boards_INITIAL_STATE: BoardsState = {
   boards: [],
+  userName: null,
+  userId: null,
 };
 
+axios.defaults.baseURL = import.meta.env.VITE_BASE_API;
+
+console.log(import.meta.env.VITE_BASE_API)
 export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(boardsReducer, Boards_INITIAL_STATE);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    loadBoards();
+    getUserCredentials();
   }, []);
 
-  const loadBoards = async () => {
-    try {
-      const { categories } = await chrome.storage.sync.get(null);
-      if (!categories) return;
+  const getUserCredentials = () => {
+    chrome.identity.getProfileUserInfo(function (userInfo) {
+      if (userInfo.email) {
+        dispatch({ type: '[Boards] - Authentication', payload: userInfo });
+        loadBoards(userInfo);
+      }
+    });
 
-      dispatch({ type: '[Boards] - Load data', payload: categories });
+    // loadBoards({ email: 'pacors88@gmail.com', id: '2131231241234124' });
+    // dispatch({ type: '[Boards] - Authentication', payload: { email: 'pacors88@gmail.com', id: '2131231241234124' } });
+  };
+
+  const loadBoards = async ({ email = 'pacors88@gmail.com', id = '2131231241234124' }: { email: string, id: string }) => {
+    try {
+      const resp = await axios.post<UserResponse>('/api/users', { email, id });
+      if (!resp.data) return;
+
+      dispatch({ type: '[Boards] - Load data', payload: resp.data.boards });
     } catch (error) {
       console.log(error, 'An error ocurred while getting the Boards');
     }
@@ -54,7 +75,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
       dispatch({ type: '[Boards] - Load data', payload: newBoards });
 
-      await chrome.storage.sync.set({ categories: newBoards });
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: newBoards });
     } catch (error) {
       console.log(error, 'An error ocurred while adding a new entriy');
     }
@@ -69,7 +90,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
       dispatch({ type: '[Boards] - Load data', payload: newBoards });
 
-      await chrome.storage.sync.set({ categories: newBoards });
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: newBoards });
 
       if (showSnack) {
         enqueueSnackbar('Ticket updated succesfully', {
@@ -100,7 +121,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
       const updatedBoards = [...state.boards, newBoard];
       dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
 
-      await chrome.storage.sync.set({ categories: updatedBoards });
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: updatedBoards });
 
       enqueueSnackbar(`Board added succesfully`, {
         variant: 'success',
@@ -129,7 +150,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
       dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
 
-      await chrome.storage.sync.set({ categories: updatedBoards });
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: updatedBoards });
     } catch (error) {
       console.log({ error });
     }
@@ -139,7 +160,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
     try {
       dispatch({ type: '[Boards] - Load data', payload: boards });
 
-      await chrome.storage.sync.set({ categories: boards });
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: boards });
     } catch (error) {
       console.log({ error });
     }
@@ -157,8 +178,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
       dispatch({ type: '[Boards] - Load data', payload: refreshedSortedIndexBoards });
 
-      await chrome.storage.sync.set({ categories: refreshedSortedIndexBoards });
-
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: refreshedSortedIndexBoards });
       enqueueSnackbar('Board removed succesfully', {
         variant: 'success',
         autoHideDuration: 2000,
@@ -181,7 +201,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
       const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
       dispatch({ type: '[Boards] - Load data', payload: newBoards });
 
-      await chrome.storage.sync.set({ categories: newBoards });
+      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: newBoards });
 
       enqueueSnackbar('Ticket removed succesfully', {
         variant: 'success',
