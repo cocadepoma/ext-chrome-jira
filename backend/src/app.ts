@@ -9,7 +9,7 @@ app.use(express.json());
 
 const port = 8000;
 
-mongoose.connect('mongodb+srv://kanbanify-api:E7zgB1HsnCWsXrT2@cluster0.9utrw.mongodb.net/kanbanify?retryWrites=true&w=majority');
+mongoose.connect(process.env.MONGO_URI);
 
 const ticketSchema = new mongoose.Schema({
   _id: String,
