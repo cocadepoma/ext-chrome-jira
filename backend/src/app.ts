@@ -1,20 +1,25 @@
-import express, { Request, Response } from 'express';
 import cors from 'cors';
+import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
 import { User } from './schemas';
 
 require('dotenv').config();
 
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
-const port = 8001;
+const port = 8002;
 
 mongoose.connect(process.env.MONGO_URI);
 
-app.post('/api/users', async (req: Request, res: Response) => {
+app.post('/kanbanify/api/users', async (req: Request, res: Response) => {
   const { email = '', id = '' } = req.body;
 
   if (!email || !id) {
@@ -44,7 +49,7 @@ app.post('/api/users', async (req: Request, res: Response) => {
   }
 });
 
-app.post('/api/users/:uid', async (req: Request, res: Response) => {
+app.post('/kanbanify/api/users/:uid', async (req: Request, res: Response) => {
   const { uid } = req.params;
   const { boards } = req.body;
 
