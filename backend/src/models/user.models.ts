@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const ticketSchema = new mongoose.Schema({
   _id: String,
@@ -19,9 +19,8 @@ const categorySchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  uid: String,
   email: String,
-  googleId: String,
+  password: String,
   boards: [categorySchema],
 });
 

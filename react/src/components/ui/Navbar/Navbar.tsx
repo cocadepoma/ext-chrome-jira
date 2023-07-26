@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { Add, Dashboard, LowPriority } from '@mui/icons-material'
-import { AppBar, Toolbar, IconButton, Typography, Tooltip, MenuItem, Menu } from '@mui/material'
+import { Add, Dashboard, LowPriority } from '@mui/icons-material';
+import { AppBar, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
 
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import img from '../../../img/128.png';
 interface Props {
@@ -46,7 +46,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             alt="logo"
             width={23}
             height={23}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             style={{ cursor: 'pointer', filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 1px 1px 3px)' }}
           />
 

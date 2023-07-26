@@ -4,34 +4,34 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import { SnackbarProvider } from 'notistack'
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { SnackbarProvider } from 'notistack';
 
 import Home from './views/Home';
 import TicketView from "./views/Tickets/Tickets";
-import BoardsView from "./views/Boards/BoardsView";
 
-import { UIProvider } from './contexts/ui';
 import { BoardsProvider } from './contexts/boards';
+import { UIProvider } from './contexts/ui';
 
 import { lightTheme } from './themes';
 
 import { Layout } from './components/layouts';
+import { AuthProvider } from "./contexts/auth";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Layout>
-        <Home />
-      </Layout>
+      <div>
+        <h2>Hola</h2>
+      </div>
     )
   },
   {
-    path: "/boards",
+    path: "/home",
     element: (
       <Layout>
-        <BoardsView />
+        <Home />
       </Layout>
     )
   },
@@ -54,17 +54,19 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <SnackbarProvider maxSnack={3}>
-      <UIProvider>
-        <BoardsProvider>
-          <ThemeProvider theme={lightTheme}>
-            <CssBaseline>
-              <RouterProvider router={router} />
-            </CssBaseline >
-          </ThemeProvider >
-        </BoardsProvider>
-      </UIProvider>
-    </SnackbarProvider>
+    <AuthProvider>
+      <SnackbarProvider maxSnack={3}>
+        <UIProvider>
+          <BoardsProvider>
+            <ThemeProvider theme={lightTheme}>
+              <CssBaseline>
+                <RouterProvider router={router} />
+              </CssBaseline >
+            </ThemeProvider >
+          </BoardsProvider>
+        </UIProvider>
+      </SnackbarProvider>
+    </AuthProvider>
   );
 };
 

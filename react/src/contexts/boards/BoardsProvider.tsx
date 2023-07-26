@@ -1,10 +1,10 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import { BoardsContext, boardsReducer } from '.';
 import { Category, Entry } from '../../interfaces';
-import { useSnackbar } from 'notistack';
-import axios from 'axios';
 import { UserResponse } from '../../interfaces/user';
 import { sleep } from '../../utils';
 
@@ -23,7 +23,7 @@ const Boards_INITIAL_STATE: BoardsState = {
   boards: [],
   userName: null,
   userId: null,
-  isLoading: true,
+  isLoading: false,
 };
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_API;
@@ -32,22 +32,18 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(boardsReducer, Boards_INITIAL_STATE);
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    getUserCredentials();
-  }, []);
-
   const getUserCredentials = async () => {
-    try {
-      chrome.identity.getProfileUserInfo(async function (userInfo) {
-        if (userInfo.email && userInfo.id) {
-          dispatch({ type: '[Boards] - Authentication', payload: userInfo });
-          await loadBoards(userInfo);
-        }
-      });
-    } catch (error) {
-      console.warn(error);
-      dispatch({ type: '[Boards] - Set Loading', payload: false });
-    }
+    // try {
+    //   chrome.identity.getProfileUserInfo(async function (userInfo) {
+    //     if (userInfo.email && userInfo.id) {
+    //       dispatch({ type: '[Boards] - Authentication', payload: userInfo });
+    //       await loadBoards(userInfo);
+    //     }
+    //   });
+    // } catch (error) {
+    //   console.warn(error);
+    dispatch({ type: '[Boards] - Set Loading', payload: false });
+    // }
 
     // For local tests
     // loadBoards({ email: 'myemail@gmail.com', id: '123' });
@@ -56,17 +52,9 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
   const loadBoards = async ({ email, id }: { email: string, id: string }) => {
     try {
-      const { categories = [] as Category[] } = await chrome.storage.sync.get(null);
       const resp = await axios.post<UserResponse>('/api/users', { email, id });
 
-      if (categories.length > 0) {
-        await axios.post<UserResponse>(`/api/users/${resp.data.uid}`, { boards: categories });
-        chrome.storage.sync.clear();
-
-        dispatch({ type: '[Boards] - Load data', payload: categories });
-      } else {
-        dispatch({ type: '[Boards] - Load data', payload: categories });
-      }
+      // dispatch({ type: '[Boards] - Load data', payload: categories });
 
       await sleep(150);
       dispatch({ type: '[Boards] - Set Loading', payload: false });

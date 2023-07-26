@@ -1,18 +1,17 @@
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { ColorResult, GithubPicker } from 'react-color';
 import { useSnackbar } from "notistack";
+import { ColorResult, GithubPicker } from 'react-color';
 
-import { Button, Card, CardActions, CardContent, CardHeader, FormControl, Grid, Autocomplete, TextField, Typography } from "@mui/material"
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
-import { Box } from "@mui/system";
 import { SaveOutlined } from '@mui/icons-material';
+import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import UndoIcon from '@mui/icons-material/Undo';
+import { Autocomplete, Button, Card, CardActions, CardContent, CardHeader, FormControl, Grid, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 
 import { BoardsContext } from '../../contexts/boards/BoardsContext';
 
-import { Layout } from "../../components/layouts"
 import { DeleteEntryDialog } from "../../components/ui";
 
 import { Category, Entry } from "../../interfaces";
@@ -136,7 +135,7 @@ const TicketView = () => {
 
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    navigate('/');
+    navigate('/home');
   };
 
   const onCloseDeleteTicket = () => {
@@ -158,7 +157,7 @@ const TicketView = () => {
     updateBoards([updatedBoard]);
 
     onCloseDeleteTicket();
-    navigate('/');
+    navigate('/home');
   };
 
   const onColorChange = (e: ColorResult) => {
@@ -273,10 +272,9 @@ const TicketView = () => {
                   variant="contained"
                   color="info"
                   startIcon={<UndoIcon />}
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/home')}
                   sx={{ fontSize: '0.8rem' }}
                 >
-
                   Back
                 </Button>
 
