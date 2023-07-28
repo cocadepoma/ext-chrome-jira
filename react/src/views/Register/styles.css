@@ -3,8 +3,14 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  transform: translateY(-5%);
+  transform: translateY(-7%);
   position: relative;
+  transition: all 1.5s;
+  animation: move-form-right 0.4s;
+}
+
+.register__container.leave {
+  transform: translate(500%, -7%);
 }
 
 .register__container  .register__form {
@@ -14,7 +20,7 @@
   border-radius: 5px;
   gap: 1.5rem;
   animation: fadeIn 0.3s;
-  transform: translateY(5%);
+  transform: translateY(7%);
 }
 
 .register__container  .register__form .register__group {
@@ -49,4 +55,14 @@
 
 .register__container .register__actions h5:hover {
   color: rgba(255, 255, 255);
+}
+
+@keyframes move-form-right {
+  from {
+    transform: translate(500%, -7%);
+  }
+
+  to {
+    transform: translate(0%, -7%);
+  }
 }

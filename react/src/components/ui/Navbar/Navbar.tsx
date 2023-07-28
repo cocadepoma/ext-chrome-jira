@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
-import { Add, Dashboard, LowPriority } from '@mui/icons-material';
+import { Add, Dashboard, LowPriority, TransitEnterexit } from '@mui/icons-material';
 import { AppBar, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { AuthContext } from '../../../contexts/auth';
 import img from '../../../img/128.png';
 interface Props {
   onOrderBoards: () => void;
@@ -15,6 +16,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { signout } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -34,6 +36,11 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
   const onBoardsOrderClick = () => {
     handleClose();
     onOrderBoards();
+  };
+
+  const onLogout = () => {
+    signout();
+    navigate('/login');
   };
 
   return (
@@ -65,6 +72,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
           >
             <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onAddBoardClick}><Add sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Add new board</MenuItem>
             <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onBoardsOrderClick}> <LowPriority sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Order boards</MenuItem>
+            <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onLogout}> <TransitEnterexit sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Logout</MenuItem>
           </Menu>
 
           {

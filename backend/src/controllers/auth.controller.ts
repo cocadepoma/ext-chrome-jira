@@ -1,9 +1,12 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 import { jwtSecret } from "../constants/constants";
 import { User } from "../models/user.models";
+
+
 
 const login = async (req: Request, res: Response) => {
   const { email = '', password = '' } = req.body;
@@ -15,6 +18,10 @@ const login = async (req: Request, res: Response) => {
     // If the user does not exist, return an error
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    if (!user.verified) {
+      return res.status(403).json({ message: 'User not verified' });
     }
 
     // Compare the provided password with the hashed password in the database
@@ -59,6 +66,29 @@ const register = async (req: Request, res: Response) => {
 
     // Save the user to the database
     const savedUser = await newUser.save();
+
+    console.log({
+      user: process.env.AUTH_EMAIL,
+      pass: process.env.AUTH_PASSWORD,
+    })
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.dondominio.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASSWORD,
+      }
+    });
+
+    const info = await transporter.sendMail({
+      from: '"Kanbanify" <mailing@deveser.net>', // sender address
+      to: "pacors88@gmail.com", // list of receivers
+      subject: "Register confirmation in Kanbanify", // Subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // html body
+    });
 
     const uid = `${savedUser.email}-${savedUser._id}`;
 

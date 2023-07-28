@@ -22,7 +22,7 @@ const login = async ({ email, password, signal }: AuthParams) => {
 };
 
 const register = async ({ email, password, signal }: AuthParams) => {
-  return kanbanifyApi.post<UserResponse>('/api/register', { email, password }, { signal });
+  return kanbanifyApi.post<UserResponse>('/api/auth/register', { email, password }, { signal });
 };
 
 export const AuthService = {

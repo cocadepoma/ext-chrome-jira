@@ -11,7 +11,7 @@
   background-color: rgb(233, 228, 228);
   background-image: url('../../img/bg.png');
   background-position: center;
-  filter: blur(3px) brightness(.25);
+  filter: blur(3px) brightness(.2);
   z-index: -1;
   animation: fadeIn 0.3s;
 }

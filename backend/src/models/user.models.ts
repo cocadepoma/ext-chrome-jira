@@ -21,6 +21,10 @@ const categorySchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   boards: [categorySchema],
 });
 

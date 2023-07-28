@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { LockOutlined, PersonOutline, Visibility, VisibilityOff } from "@mui/icons-material";
@@ -27,6 +27,9 @@ export const Login = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
 
   const onSubmit = async () => {
     setIsFormSubmitted(true);
@@ -63,8 +66,16 @@ export const Login = () => {
     return mailformat.test(email);
   };
 
+  const navigationToRegister = async () => {
+    containerRef.current?.classList.add('leave');
+    actionsRef.current?.classList.add('leave');
+
+    await sleep(200);
+    navigate('/register');
+  };
+
   return (
-    <div className="login__container">
+    <div ref={containerRef} className="login__container">
 
       <form className="login__form" onSubmit={(e) => e.preventDefault()}>
 
@@ -84,7 +95,7 @@ export const Login = () => {
               startAdornment: <PersonOutline sx={{ color: 'rgb(213, 213, 213)', marginRight: '0.5rem', fontSize: '1rem' }} />,
             }}
             FormHelperTextProps={{
-              sx: { fontSize: '.6rem' }
+              sx: { fontSize: '.5rem' }
             }}
             error={isFormSubmitted && !isValidEmail(form.email)}
             helperText={isFormSubmitted && !isValidEmail(form.email) && 'The email is not a valid email'}
@@ -114,7 +125,7 @@ export const Login = () => {
               )
             }}
             FormHelperTextProps={{
-              sx: { fontSize: '.6rem' }
+              sx: { fontSize: '.5rem' }
             }}
             error={isFormSubmitted && form.password.length === 0}
             helperText={isFormSubmitted && form.password.length === 0 && 'You must introduce a password'}
@@ -140,8 +151,8 @@ export const Login = () => {
         </Button>
       </form >
 
-      <div className="login__actions">
-        <h5 onClick={() => navigate('/register')}>Create Account</h5>
+      <div ref={actionsRef} className="login__actions">
+        <h5 onClick={navigationToRegister}>Create Account</h5>
         <h5>Forgot password?</h5>
       </div>
 
