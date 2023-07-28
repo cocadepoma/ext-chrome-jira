@@ -1,14 +1,16 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { EmailOutlined, PersonOutline, Visibility, VisibilityOff } from "@mui/icons-material";
+import { LockOutlined, PersonOutline, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
 
 import { AuthContext } from "../../contexts/auth";
 import { BoardsContext } from "../../contexts/boards";
 import { AuthService } from "../../services/AuthService";
 
+import { inputFormStyles } from "../../styles/muiOverrides";
 import { sleep } from "../../utils";
+
 import './styles.css';
 
 export const Login = () => {
@@ -78,8 +80,8 @@ export const Login = () => {
             placeholder="example@email.com"
             sx={{ height: '2.3rem' }}
             InputProps={{
-              sx: { display: 'flex', alignItems: 'center', height: '2.25rem', fontSize: '0.7rem', color: 'grey' },
-              startAdornment: <PersonOutline color="disabled" sx={{ marginRight: '0.5rem', fontSize: '1rem' }} />,
+              sx: inputFormStyles,
+              startAdornment: <PersonOutline sx={{ color: 'rgb(213, 213, 213)', marginRight: '0.5rem', fontSize: '1rem' }} />,
             }}
             FormHelperTextProps={{
               sx: { fontSize: '.6rem' }
@@ -100,13 +102,13 @@ export const Login = () => {
             placeholder="**********"
             sx={{ height: '2.3rem' }}
             InputProps={{
-              sx: { display: 'flex', alignItems: 'center', height: '2.25rem', fontSize: '0.7rem', color: 'grey' },
-              startAdornment: <EmailOutlined color="disabled" sx={{ marginRight: '0.5rem', fontSize: '1rem' }} />,
+              sx: inputFormStyles,
+              startAdornment: <LockOutlined sx={{ color: 'rgb(213, 213, 213)', marginRight: '0.5rem', fontSize: '1rem' }} />,
               endAdornment: (
                 <IconButton onClick={() => setIsPasswordShown(!isPasswordShown)}>
                   {isPasswordShown
-                    ? <Visibility color="disabled" sx={{ fontSize: '0.9rem' }} />
-                    : <VisibilityOff color="disabled" sx={{ fontSize: '0.9rem' }} />
+                    ? <Visibility sx={{ color: 'rgb(213, 213, 213)', fontSize: '0.9rem' }} />
+                    : <VisibilityOff sx={{ color: 'rgb(213, 213, 213)', fontSize: '0.9rem' }} />
                   }
                 </IconButton>
               )
@@ -124,13 +126,24 @@ export const Login = () => {
           variant="contained"
           color="info"
           onClick={onSubmit}
-          sx={{ marginTop: '1.5rem' }}
-          // endIcon={<CircularProgress size={20} sx={{ color: 'white' }} />}
+          sx={{
+            marginTop: '1.5rem',
+            borderRadius: '20px',
+            backgroundColor: '#bc981f',
+            '&:hover': {
+              backgroundColor: '#dab438'
+            }
+          }}
           disabled={isLoading}
         >
-          {isLoading ? <CircularProgress size={20} sx={{ color: 'white' }} /> : 'Login'}
+          {isLoading ? <CircularProgress size={20} sx={{ color: 'rgb(213, 213, 213)' }} /> : 'Login'}
         </Button>
       </form >
+
+      <div className="login__actions">
+        <h5 onClick={() => navigate('/register')}>Create Account</h5>
+        <h5>Forgot password?</h5>
+      </div>
 
     </div >
   )
