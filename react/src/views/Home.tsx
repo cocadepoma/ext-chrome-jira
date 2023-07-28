@@ -1,16 +1,16 @@
 import { useSnackbar } from 'notistack';
-import { useContext, useState } from 'react'
+import { useContext, useState } from 'react';
 
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
-import { CardHeader, DeleteBoardDialog, DeleteEntryDialog, EditBoardDialog, EditEntryDialog, EmptyBoard, EntryList, NewBoardDialog } from '../components/ui'
+import { CardHeader, DeleteBoardDialog, DeleteEntryDialog, EditBoardDialog, EditEntryDialog, EmptyBoard, EntryList, NewBoardDialog } from '../components/ui';
 import { AddEntryDialog } from '../components/ui/AddEntryDialog/AddEntryDialog';
 
-import { BoardsContext } from '../contexts/boards'
+import { BoardsContext } from '../contexts/boards';
 
-import { Category, Entry } from '../interfaces'
+import { Category, Entry } from '../interfaces';
 
-import styles from '../styles/modules/Home.module.css'
+import styles from '../styles/modules/Home.module.css';
 
 const Home = () => {
   const { enqueueSnackbar } = useSnackbar();

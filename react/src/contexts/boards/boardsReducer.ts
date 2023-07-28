@@ -1,9 +1,8 @@
-import { Category, Entry } from '../../interfaces';
 import { BoardsState } from '.';
+import { Category, Entry } from '../../interfaces';
 
 type BoardsActionType =
   | { type: '[Boards] - Add-Entry', payload: Entry }
-  | { type: '[Boards] - Authentication', payload: { email: string, id: string } }
   | { type: '[Boards] - Load data', payload: Category[] }
   | { type: '[Boards] - Update Boards', payload: Category[] }
   | { type: '[Boards] - Add Board', payload: Category }
@@ -68,13 +67,6 @@ export const boardsReducer = (state: BoardsState, action: BoardsActionType): Boa
       return {
         ...state,
         boards: refreshedSortedIndexBoards
-      };
-
-    case '[Boards] - Authentication':
-      return {
-        ...state,
-        userId: action.payload.id,
-        userName: action.payload.email
       };
 
     case '[Boards] - Set Loading': {

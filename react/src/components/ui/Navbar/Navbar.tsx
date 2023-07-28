@@ -46,7 +46,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             alt="logo"
             width={23}
             height={23}
-            onClick={() => navigate('/home')}
+            onClick={() => navigate('/boards')}
             style={{ cursor: 'pointer', filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 1px 1px 3px)' }}
           />
 
@@ -68,7 +68,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
           </Menu>
 
           {
-            location.pathname === '/' && (
+            location.pathname === '/boards' && (
               <Tooltip title="Board options">
                 <IconButton size="small" edge="start" onClick={handleClick}>
                   <Dashboard sx={{ width: '1rem', height: '1rem' }} />

@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 import { Category, Entry } from '../../interfaces';
+import { Board } from '../../interfaces/user';
 
 export interface ContextProps {
   boards: Category[];
-  userId: null | string;
-  userName: null | string;
   isLoading: boolean;
 
+  loadBoards: (boards: Board[]) => void;
   addNewEntry: (description: string, boardId: string) => Promise<void>;
   updateEntry: (entry: Entry, showSnack?: boolean) => Promise<void>;
   deleteEntry: (entry: Entry) => Promise<void>;

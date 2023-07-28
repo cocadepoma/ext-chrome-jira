@@ -17,7 +17,7 @@ import { DeleteEntryDialog } from "../../components/ui";
 import { Category, Entry } from "../../interfaces";
 import { getTicketTime } from "../../utils";
 
-const TicketView = () => {
+export const TicketDetail = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { enqueueSnackbar } = useSnackbar();
@@ -135,7 +135,7 @@ const TicketView = () => {
 
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    navigate('/home');
+    navigate('/boards');
   };
 
   const onCloseDeleteTicket = () => {
@@ -157,7 +157,7 @@ const TicketView = () => {
     updateBoards([updatedBoard]);
 
     onCloseDeleteTicket();
-    navigate('/home');
+    navigate('/boards');
   };
 
   const onColorChange = (e: ColorResult) => {
@@ -272,7 +272,7 @@ const TicketView = () => {
                   variant="contained"
                   color="info"
                   startIcon={<UndoIcon />}
-                  onClick={() => navigate('/home')}
+                  onClick={() => navigate('/boards')}
                   sx={{ fontSize: '0.8rem' }}
                 >
                   Back
@@ -320,5 +320,3 @@ const TicketView = () => {
     </div>
   )
 };
-
-export default TicketView;

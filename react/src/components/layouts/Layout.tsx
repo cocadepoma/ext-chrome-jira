@@ -1,4 +1,3 @@
-import { CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
 import { BoardsContext } from "../../contexts/boards";
@@ -12,7 +11,7 @@ interface Props {
 }
 
 export const Layout: React.FC<Props> = ({ title = 'Kanbanify', children }: Props) => {
-  const { isLoading, userName, boards, addNewBoard } = useContext(BoardsContext);
+  const { boards, addNewBoard } = useContext(BoardsContext);
   const [isNewBoardDialogOpen, setIsNewBoardDialogOpen] = useState(false);
   const [isOrderBoardDialogOpen, setIsOrderBoardDialogOpen] = useState(false);
 
@@ -47,40 +46,29 @@ export const Layout: React.FC<Props> = ({ title = 'Kanbanify', children }: Props
 
   return (
     <div className={styles.layout__container}>
-      {
-        !isLoading
-          ? (
-            <>
-              <Navbar onBoardAdd={onBoardAdd} onOrderBoards={onOrderBoards} />
-              <div className={styles['layout__content--container']}>
-                {children}
-              </div>
+      <Navbar onBoardAdd={onBoardAdd} onOrderBoards={onOrderBoards} />
 
-              {
-                isOrderBoardDialogOpen && (
-                  <OrderBoardDialog
-                    isOpen={isOrderBoardDialogOpen}
-                    handleClose={() => setIsOrderBoardDialogOpen(false)}
-                  />
-                )
-              }
-              {
-                isNewBoardDialogOpen && (
-                  <NewBoardDialog
-                    isOpen={isNewBoardDialogOpen}
-                    handleClose={() => setIsNewBoardDialogOpen(false)}
-                    handleConfirm={handleAddNewBoard}
-                  />
-                )
-              }
-            </>
-          )
-          : (
-            <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <CircularProgress color="info" />
-            </div>
-          )
+      <div className={styles['layout__content--container']}>
+        {children}
+      </div>
+
+      {
+        isOrderBoardDialogOpen && (
+          <OrderBoardDialog
+            isOpen={isOrderBoardDialogOpen}
+            handleClose={() => setIsOrderBoardDialogOpen(false)}
+          />
+        )
+      }
+      {
+        isNewBoardDialogOpen && (
+          <NewBoardDialog
+            isOpen={isNewBoardDialogOpen}
+            handleClose={() => setIsNewBoardDialogOpen(false)}
+            handleConfirm={handleAddNewBoard}
+          />
+        )
       }
     </div>
-  )
-}
+  );
+};

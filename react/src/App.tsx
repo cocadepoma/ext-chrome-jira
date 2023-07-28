@@ -1,14 +1,6 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
-
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
-
-import Home from './views/Home';
-import TicketView from "./views/Tickets/Tickets";
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { BoardsProvider } from './contexts/boards';
 import { UIProvider } from './contexts/ui';
@@ -16,22 +8,45 @@ import { UIProvider } from './contexts/ui';
 import { lightTheme } from './themes';
 
 import { Layout } from './components/layouts';
+import { AuthLayout } from './components/layouts/AuthLayout';
 import { AuthProvider } from "./contexts/auth";
+
+import { ProtectedRoute } from './routes/ProtectedRoute';
+import { UnprotectedRoute } from './routes/UnprotectedRoute';
+
+import Home from './views/Home';
+import { Login } from './views/Login/Login';
+import { Register } from './views/Register/Register';
+import { TicketDetail } from './views/TicketDetail/TicketDetail';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: (
-      <div>
-        <h2>Hola</h2>
-      </div>
+      <AuthLayout>
+        <UnprotectedRoute>
+          <Login />
+        </UnprotectedRoute>
+      </AuthLayout>
     )
   },
   {
-    path: "/home",
+    path: "/register",
+    element: (
+      <AuthLayout>
+        <UnprotectedRoute>
+          <Register />
+        </UnprotectedRoute>
+      </AuthLayout>
+    )
+  },
+  {
+    path: "/boards",
     element: (
       <Layout>
-        <Home />
+        <ProtectedRoute>
+          <Home />
+        </ProtectedRoute>
       </Layout>
     )
   },
@@ -39,14 +54,16 @@ const router = createBrowserRouter([
     path: "/ticket/:boardid/:ticketid",
     element: (
       <Layout>
-        <TicketView />
+        <ProtectedRoute>
+          <TicketDetail />
+        </ProtectedRoute>
       </Layout>
     )
   },
   {
     path: "*",
     element: (
-      <Navigate to="/" />
+      <Navigate to="/login" />
     )
   },
 ]);

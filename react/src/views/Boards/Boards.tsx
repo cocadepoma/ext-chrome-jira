@@ -1,18 +1,18 @@
-import { useContext, useState } from 'react'
+import { useContext, useState } from 'react';
 
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { useSnackbar } from 'notistack';
 import { AddCircleOutlineOutlined, DeleteOutline, Edit } from '@mui/icons-material';
-import { IconButton } from '@mui/material'
+import { IconButton } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 
-import { BoardsContext } from '../../contexts/boards'
+import { BoardsContext } from '../../contexts/boards';
 
 import { DeleteBoardDialog, EditBoardDialog, NewBoardDialog } from '../../components/ui';
 
-import { Category } from '../../interfaces'
+import { Category } from '../../interfaces';
 import styles from '../../styles/modules/Boards.module.css';
 
-const BoardsView = () => {
+export const Boards = () => {
   const { boards, patchBoards, addNewBoard, deleteBoard, updateBoards } = useContext(BoardsContext);
   const [isNewBoardDialogOpen, setIsNewBoardDialogOpen] = useState(false);
   const [activeDeleteBoard, setActiveDeleteBoard] = useState<Category | null>(null);
@@ -199,6 +199,4 @@ const BoardsView = () => {
       }
     </div>
   )
-}
-
-export default BoardsView;
+};

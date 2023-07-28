@@ -1,17 +1,18 @@
-import { FC, useReducer } from 'react';
+import { useSnackbar } from 'notistack';
+import { FC, useContext, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import axios from 'axios';
-import { useSnackbar } from 'notistack';
 import { BoardsContext, boardsReducer } from '.';
+import { AuthContext } from '../auth';
+
+
 import { Category, Entry } from '../../interfaces';
-import { UserResponse } from '../../interfaces/user';
-import { sleep } from '../../utils';
+import { Board, UserResponse } from '../../interfaces/user';
+
+import kanbanifyApi from '../../api/kanbanify';
 
 export interface BoardsState {
   boards: Category[];
-  userName: null | string;
-  userId: null | string;
   isLoading: boolean;
 }
 
@@ -21,46 +22,17 @@ interface BoardsProviderProps {
 
 const Boards_INITIAL_STATE: BoardsState = {
   boards: [],
-  userName: null,
-  userId: null,
   isLoading: false,
 };
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_API;
-
 export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
+  const { userId } = useContext(AuthContext);
+
   const [state, dispatch] = useReducer(boardsReducer, Boards_INITIAL_STATE);
   const { enqueueSnackbar } = useSnackbar();
 
-  const getUserCredentials = async () => {
-    // try {
-    //   chrome.identity.getProfileUserInfo(async function (userInfo) {
-    //     if (userInfo.email && userInfo.id) {
-    //       dispatch({ type: '[Boards] - Authentication', payload: userInfo });
-    //       await loadBoards(userInfo);
-    //     }
-    //   });
-    // } catch (error) {
-    //   console.warn(error);
-    dispatch({ type: '[Boards] - Set Loading', payload: false });
-    // }
-
-    // For local tests
-    // loadBoards({ email: 'myemail@gmail.com', id: '123' });
-    // dispatch({ type: '[Boards] - Authentication', payload: { email: 'myemail@gmail.com', id: '123' } });
-  };
-
-  const loadBoards = async ({ email, id }: { email: string, id: string }) => {
-    try {
-      const resp = await axios.post<UserResponse>('/api/users', { email, id });
-
-      // dispatch({ type: '[Boards] - Load data', payload: categories });
-
-      await sleep(150);
-      dispatch({ type: '[Boards] - Set Loading', payload: false });
-    } catch (error) {
-      console.log(error, 'An error ocurred while getting the Boards');
-    }
+  const loadBoards = async (boards: Board[]) => {
+    dispatch({ type: '[Boards] - Load data', payload: boards });
   };
 
   const addNewEntry = async (description: string, boardId: string) => {
@@ -79,11 +51,9 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
       const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
 
-      dispatch({ type: '[Boards] - Load data', payload: newBoards });
-
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: newBoards });
+      await patchBoards(newBoards);
     } catch (error) {
-      console.log(error, 'An error ocurred while adding a new entriy');
+      console.warn(error, 'An error ocurred while adding a new entriy');
     }
   };
 
@@ -94,9 +64,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
 
       const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
 
-      dispatch({ type: '[Boards] - Load data', payload: newBoards });
-
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: newBoards });
+      await patchBoards(newBoards);
 
       if (showSnack) {
         enqueueSnackbar('Ticket updated succesfully', {
@@ -109,7 +77,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         })
       }
     } catch (error) {
-      console.log({ error });
+      console.warn({ error });
     }
   };
 
@@ -125,9 +93,8 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
       };
 
       const updatedBoards = [...state.boards, newBoard];
-      dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
 
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: updatedBoards });
+      await patchBoards(updatedBoards);
 
       enqueueSnackbar(`Board added succesfully`, {
         variant: 'success',
@@ -138,7 +105,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         }
       })
     } catch (error) {
-      console.log({ error });
+      console.warn({ error });
     }
   };
 
@@ -154,21 +121,9 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         return board;
       })
 
-      dispatch({ type: '[Boards] - Load data', payload: updatedBoards });
-
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: updatedBoards });
+      await patchBoards(updatedBoards);
     } catch (error) {
-      console.log({ error });
-    }
-  };
-
-  const patchBoards = async (boards: Category[]) => {
-    try {
-      dispatch({ type: '[Boards] - Load data', payload: boards });
-
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: boards });
-    } catch (error) {
-      console.log({ error });
+      console.warn({ error });
     }
   };
 
@@ -182,9 +137,8 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         }))
         .sort((a, b) => a.indexOrder - b.indexOrder);
 
-      dispatch({ type: '[Boards] - Load data', payload: refreshedSortedIndexBoards });
+      await patchBoards(refreshedSortedIndexBoards);
 
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: refreshedSortedIndexBoards });
       enqueueSnackbar('Board removed succesfully', {
         variant: 'success',
         autoHideDuration: 2000,
@@ -194,7 +148,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         }
       });
     } catch (error) {
-      console.log({ error });
+      console.warn({ error });
     }
   };
 
@@ -205,9 +159,8 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
       copyBoard.tickets = updatedTickets;
 
       const newBoards = state.boards.map(board => board._id === copyBoard._id ? copyBoard : board);
-      dispatch({ type: '[Boards] - Load data', payload: newBoards });
 
-      await axios.post<UserResponse>(`/api/users/${state.userName}-${state.userId}`, { boards: newBoards });
+      await patchBoards(newBoards);
 
       enqueueSnackbar('Ticket removed succesfully', {
         variant: 'success',
@@ -218,7 +171,17 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
         }
       });
     } catch (error) {
-      console.log({ error });
+      console.warn({ error });
+    }
+  };
+
+  const patchBoards = async (boards: Category[]) => {
+    try {
+      dispatch({ type: '[Boards] - Load data', payload: boards });
+
+      await kanbanifyApi.patch<UserResponse>(`/api/users/${userId}`, { boards: boards });
+    } catch (error) {
+      console.warn({ error });
     }
   };
 
@@ -226,6 +189,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
     <BoardsContext.Provider
       value={{
         ...state,
+        loadBoards,
         addNewEntry,
         updateEntry,
         deleteEntry,
