@@ -63,8 +63,8 @@ const userEmailExists = async (req: Request, res: Response, next: NextFunction) 
       // If the path is /, is a login
       case '/kanbanify/api/auth/login':
         if (!user) {
-          return res.status(404).json({
-            msg: 'The user email does not exist'
+          return res.status(403).json({
+            msg: 'Invalid credentials'
           });
         }
         break;

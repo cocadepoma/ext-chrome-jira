@@ -1,8 +1,21 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { LockOutlined, PersonOutline } from "@mui/icons-material";
-import { Button, Checkbox, CircularProgress, FormControlLabel, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  Snackbar,
+  TextField
+} from "@mui/material";
 
 import { AuthContext } from "../../contexts/auth";
 import { BoardsContext } from "../../contexts/boards";
@@ -10,6 +23,7 @@ import { BoardsContext } from "../../contexts/boards";
 import { AuthService } from "../../services/AuthService";
 import { inputFormStyles } from "../../styles/muiOverrides";
 import { sleep } from "../../utils";
+
 import './styles.css';
 
 export const Register = () => {
@@ -26,10 +40,24 @@ export const Register = () => {
   });
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('Error while trying to register your account');
+  const [emailError, setEmailError] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [autoFocus, setIsAutoFocus] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    focusToInput();
+  }, []);
+
+  const focusToInput = async () => {
+    // if (!inputRef.current) return;
+    await sleep(500);
+    setIsAutoFocus(true);
+  };
 
   const onSubmit = async () => {
     setIsFormSubmitted(true);
@@ -49,14 +77,25 @@ export const Register = () => {
         token: data.token
       });
       loadBoards(data.boards);
-      await sleep(500);
-      navigate('/boards');
-    } catch (error) {
+
+      setIsDialogOpen(true);
+    } catch (error: any) {
       console.warn(error);
+
+      if (error.response.status === 409) {
+        setSnackbarMessage('An user already exists with that email');
+        setEmailError(true);
+      } else {
+        setSnackbarMessage('Error while trying to register your account');
+      }
+      setShowSnackbar(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailError(false);
     setForm({
       ...form,
       [event.target.name]: event.target.name === 'terms'
@@ -98,15 +137,24 @@ export const Register = () => {
     navigate('/login')
   };
 
+  const handleCloseSnackbar = () => {
+    setShowSnackbar(false);
+  };
+
+  const handleCloseDialog = () => {
+    navigate('/login');
+  };
+
   return (
     <div ref={ref} className="register__container">
 
-      <form className="register__form" onSubmit={(e) => e.preventDefault()}>
+      <form className="register__form" onSubmit={(e) => e.preventDefault()} autoComplete="off">
 
         <div className="register__group">
           <label htmlFor="email">Email</label>
           <TextField
-            autoComplete="true"
+            focused={autoFocus}
+            autoComplete="off"
             id="email"
             name="email"
             type="email"
@@ -121,8 +169,8 @@ export const Register = () => {
             FormHelperTextProps={{
               sx: { fontSize: '.5rem' }
             }}
-            error={isFormSubmitted && !isValidEmail(form.email)}
-            helperText={isFormSubmitted && !isValidEmail(form.email) && 'The email is not a valid email'}
+            error={isFormSubmitted && !isValidEmail(form.email) || emailError}
+            helperText={isFormSubmitted && !isValidEmail(form.email) && 'The email is not a valid email' || emailError && 'Email already exists'}
           />
         </div>
 
@@ -205,7 +253,7 @@ export const Register = () => {
               </span>
             )}
           />
-          {<span style={{ color: '#ff1744', fontSize: '0.5rem', paddingLeft: '0.8rem' }}>{isFormSubmitted && !form.terms ? 'You must agree the terms before' : ''}</span>}
+          {<span style={{ color: '#ff1744', fontSize: '0.5rem', paddingLeft: '0.8rem' }}>{isFormSubmitted && !form.terms ? 'You must agree the terms before registering' : ''}</span>}
         </div>
 
         <Button
@@ -229,6 +277,36 @@ export const Register = () => {
       <div className="register__actions">
         <h5 onClick={navigateToLogin}>Already have an account?</h5>
       </div>
+
+      <Snackbar anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} open={showSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: '15rem', fontSize: '0.65rem' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Confirm registration
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Thanks for signing up, we've emailed you a confirmation link, once you confirm your email, you can continue setting up your profile
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
 
     </div >
   )

@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { LockOutlined, PersonOutline, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
+import { Alert, Button, CircularProgress, IconButton, Snackbar, TextField } from "@mui/material";
 
 import { AuthContext } from "../../contexts/auth";
 import { BoardsContext } from "../../contexts/boards";
@@ -28,11 +28,15 @@ export const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('User or email not valid');
+
   const containerRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
 
   const onSubmit = async () => {
     setIsFormSubmitted(true);
+
     if (!isValidEmail(form.email)) return;
     if (!form.password.length) return;
     if (isLoading) return;
@@ -49,8 +53,17 @@ export const Login = () => {
       loadBoards(data.boards);
       await sleep(500);
       navigate('/boards');
-    } catch (error) {
+    } catch (error: any) {
       console.warn(error);
+
+      if (error?.response?.data?.message === 'User not verified') {
+        setSnackbarMessage('Account not activated yet, please check your email');
+      } else {
+        setSnackbarMessage('User or email not valid');
+      }
+      setShowSnackbar(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,6 +87,10 @@ export const Login = () => {
     navigate('/register');
   };
 
+  const handleCloseSnackbar = () => {
+    setShowSnackbar(false);
+  };
+
   return (
     <div ref={containerRef} className="login__container">
 
@@ -82,7 +99,8 @@ export const Login = () => {
         <div className="login__group">
           <label htmlFor="email">Email</label>
           <TextField
-            autoComplete="true"
+            autoFocus
+            autoComplete="off"
             id="email"
             name="email"
             type="email"
@@ -156,6 +174,14 @@ export const Login = () => {
         <h5>Forgot password?</h5>
       </div>
 
+      <Snackbar anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} open={showSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: '15rem', fontSize: '0.65rem' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div >
   )
 }

@@ -3,14 +3,13 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  transform: translateY(-5%);
   position: relative;
   animation: fade-in-scaling 0.6s;
   transition: all 0.3s;
 }
 
 .login__container.leave {
-  transform: scale(0.85) translateY(-5%);
+  transform: scale(0.85);
   opacity: 0;
 }
 
@@ -21,6 +20,7 @@
   border-radius: 5px;
   gap: 1.5rem;
   animation: fadeIn 0.3s;
+  transform: translateY(-10%);
 }
 
 .login__container  .login__form .login__group {
@@ -60,12 +60,12 @@
 
 @keyframes fade-in-scaling {
   from {
-    transform: scale(0.85) translateY(-5%);
+    transform: scale(0.85);
     opacity: 0;
   }
 
   to {
-    transform: scale(1) translateY(-5%);
+    transform: scale(1);
     opacity: 1;
   }
 }

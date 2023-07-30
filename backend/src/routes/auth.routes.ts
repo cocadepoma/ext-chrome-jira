@@ -30,6 +30,9 @@ router.post(
   authController.register
 );
 
+// Confirm
+router.post('/kanbanify/api/auth/confirm', authController.confirm);
+
 // Refresh token
 router.post(
   '/kanbanify/api/auth/refresh',
