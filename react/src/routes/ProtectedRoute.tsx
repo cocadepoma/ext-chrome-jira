@@ -7,11 +7,11 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { userId } = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userId) {
+    if (!userId || !token) {
       return navigate('/login', { replace: true });
     }
   }, []);

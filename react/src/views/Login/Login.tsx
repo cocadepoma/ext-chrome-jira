@@ -11,6 +11,9 @@ import { AuthService } from "../../services/AuthService";
 import { inputFormStyles } from "../../styles/muiOverrides";
 import { sleep } from "../../utils";
 
+import { UIContext } from "../../contexts/ui";
+
+
 import './styles.css';
 
 export const Login = () => {
@@ -18,6 +21,7 @@ export const Login = () => {
 
   const { signin } = useContext(AuthContext);
   const { loadBoards } = useContext(BoardsContext);
+  const { isAppLoading } = useContext(UIContext);
 
   const [form, setForm] = useState({
     email: '',
@@ -51,6 +55,8 @@ export const Login = () => {
         token: data.token
       });
       loadBoards(data.boards);
+      await AuthService.setEmail(data.email);
+      await AuthService.setToken(data.token);
       await sleep(500);
       navigate('/boards');
     } catch (error: any) {
@@ -83,7 +89,7 @@ export const Login = () => {
     containerRef.current?.classList.add('leave');
     actionsRef.current?.classList.add('leave');
 
-    await sleep(200);
+    await sleep(300);
     navigate('/register');
   };
 
@@ -99,7 +105,7 @@ export const Login = () => {
         <div className="login__group">
           <label htmlFor="email">Email</label>
           <TextField
-            autoFocus
+            autoFocus={!isAppLoading}
             autoComplete="off"
             id="email"
             name="email"

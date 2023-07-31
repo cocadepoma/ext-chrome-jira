@@ -1,15 +1,7 @@
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { SnackbarProvider } from 'notistack';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
-
-import { BoardsProvider } from './contexts/boards';
-import { UIProvider } from './contexts/ui';
-
-import { lightTheme } from './themes';
 
 import { Layout } from './components/layouts';
 import { AuthLayout } from './components/layouts/AuthLayout';
-import { AuthProvider } from "./contexts/auth";
 
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { UnprotectedRoute } from './routes/UnprotectedRoute';
@@ -28,7 +20,7 @@ const router = createBrowserRouter([
           <Login />
         </UnprotectedRoute>
       </AuthLayout>
-    )
+    ),
   },
   {
     path: "/register",
@@ -69,21 +61,8 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
   return (
-    <AuthProvider>
-      <SnackbarProvider maxSnack={3}>
-        <UIProvider>
-          <BoardsProvider>
-            <ThemeProvider theme={lightTheme}>
-              <CssBaseline>
-                <RouterProvider router={router} />
-              </CssBaseline >
-            </ThemeProvider >
-          </BoardsProvider>
-        </UIProvider>
-      </SnackbarProvider>
-    </AuthProvider>
+    <RouterProvider router={router} />
   );
 };
 

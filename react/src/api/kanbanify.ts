@@ -8,6 +8,7 @@ const kanbanifyApi = axios.create({
 kanbanifyApi.interceptors.request.use(
   async (config) => {
     const token = await AuthService.getToken();
+
     if (token) {
       config.headers['x-token'] = token;
     }

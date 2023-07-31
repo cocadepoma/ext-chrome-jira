@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
-import { v4 as uuidv4 } from 'uuid';
 
 import { jwtSecret } from "../constants/constants";
 import { User } from "../models/user.models";
@@ -33,7 +32,7 @@ const login = async (req: Request, res: Response) => {
 
     // If the email and password are correct, generate and return a JWT
     const uid = `${user.email}-${user._id}`;
-    const token = jwt.sign({ uid, email: user.email }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ uid, email: user.email }, jwtSecret, { expiresIn: 60 });
 
     return res.json({ boards: user.boards, token, email, id: user._id });
   } catch (error) {
@@ -48,21 +47,21 @@ const register = async (req: Request, res: Response) => {
   try {
     // Check if the user already exists in the database
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: 'Email already registered' });
+
+    if (existingUser && !existingUser.verified) {
+      await existingUser.deleteOne({ email });
     }
 
     // Hash the password using bcrypt
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const registerToken = uuidv4();
+    const registerToken = jwt.sign({ email }, jwtSecret, { expiresIn: 60 * 30 });
 
     // Create a new user
     const newUser = new User({
       email: email,
       password: hashedPassword,
       verified: false,
-      registerToken,
       boards: [],
     });
 
@@ -136,6 +135,7 @@ const register = async (req: Request, res: Response) => {
             <p>Thank you!</p>
           </div>
           <div class="logo">
+            <p>Kanbanify is an app made by:</p>
             <img src="https://deveser.net/_next/image?url=%2Fimages%2Fwhite.png&w=384&q=75" alt="Your Company Logo">
           </div>
         </div>
@@ -150,16 +150,10 @@ const register = async (req: Request, res: Response) => {
       html: emailContent,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-
-    const uid = `${savedUser.email}-${savedUser._id}`;
-
-    // Generate and return a JWT for the newly registered user
-    const token = jwt.sign({ uid, email: savedUser.email }, jwtSecret, { expiresIn: '1h' });
+    await transporter.sendMail(mailOptions);
 
     return res.status(201).json({
       email: savedUser.email,
-      token,
       id: savedUser._id,
       boards: savedUser.boards
     });
@@ -169,15 +163,16 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const refresh = (req: Request, res: Response) => {
+const refresh = async (req: Request, res: Response) => {
   // @ts-ignore
-  const { uid } = req;
+  const { uid, email } = req;
 
   try {
-    const newAccessToken = jwt.sign({ uid }, jwtSecret, { expiresIn: '1h' });
+    const newAccessToken = jwt.sign({ uid, email }, jwtSecret, { expiresIn: 60 });
+    const user = await User.findOne({ email });
 
     // Return the new access token
-    return res.json({ token: newAccessToken });
+    return res.json({ token: newAccessToken, id: user._id, email, boards: user.boards });
   } catch (error) {
     console.error(error);
     return res.status(401).json({ message: 'Invalid or expired refresh token' });
@@ -186,18 +181,15 @@ const refresh = (req: Request, res: Response) => {
 
 // Endpoint to handle email confirmation
 const confirm = async (req: Request, res: Response) => {
-  const { registerToken } = req.body;
-
-  if (!registerToken) {
-    return res.status(404).json({ message: 'The confirmation token is required' });
-  }
+  // @ts-ignore
+  const { email } = req;
 
   try {
     // Find the user with the given confirmation token
-    const user = await User.findOne({ registerToken: registerToken });
+    const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: 'Invalid confirmation token' });
+      return res.status(404).json({ message: 'User register not found' });
     }
 
     // If the user is already confirmed, return an error (or a success message, depending on your requirements)
@@ -207,7 +199,6 @@ const confirm = async (req: Request, res: Response) => {
 
     // Update the user's verified flag to true
     user.verified = true;
-    user.registerToken = undefined; // Clear the confirmation token, as it's no longer needed
 
     await user.save();
 

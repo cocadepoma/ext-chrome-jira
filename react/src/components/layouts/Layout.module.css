@@ -2,6 +2,7 @@
   height: 585px;
   display: flex;
   flex-direction: column;
+  background-color: white;
 }
 
 .layout__content--container {

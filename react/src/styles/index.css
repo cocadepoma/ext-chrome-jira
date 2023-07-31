@@ -10,6 +10,7 @@ body,
   height: 586px;
   width: 100%;
   min-width: 800px;
+  background-color: rgb(19, 18, 18);
 }
 
 @keyframes fadeIn {

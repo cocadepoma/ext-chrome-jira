@@ -1,7 +1,9 @@
 import { Typography } from '@mui/material';
-import './styles.css';
 
 import img from '../../img/128.png';
+import logoDeveser from '../../img/logo_white.png';
+
+import './styles.css';
 
 interface Props {
   children: JSX.Element;
@@ -23,6 +25,15 @@ export const AuthLayout = ({ children }: Props) => {
         <Typography variant="h1" sx={{ color: 'rgba(255,255,255,1)', fontSize: '1.7rem' }}>Kanbanify</Typography>
       </div>
       {children}
+
+      <a className="logo-deveser" href="https://deveser.net/" target="_blank">
+        <p>by</p>
+        <img
+          src={logoDeveser}
+          alt="logo-deveser"
+          style={{ filter: 'drop-shadow(rgba(255, 255, 255, 0.4) 1px 1px 3px)' }}
+        />
+      </a>
     </div>
   );
 };

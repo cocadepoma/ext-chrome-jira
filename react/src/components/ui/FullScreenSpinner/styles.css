@@ -1,0 +1,62 @@
+.full-screen-spinner__container {
+  position: fixed;
+  width: 100%;
+  height: 586px;
+  background-color: rgba(0,0,0,1);
+  z-index: 1101;
+  animation: fadeIn 0.1s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.full-screen-spinner__container .full-screen-spinner__bg {
+  inset: 0;
+  position: absolute;
+  background-color: rgb(33, 33, 33);
+  background-image: url('../../../img/bg.png');
+  background-position: center;
+  filter: blur(3px) brightness(.2);
+}
+
+.full-screen-spinner__container .spinner {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,#ffa516 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#ffa516);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: spin 0.8s infinite linear;
+}
+
+.full-screen-spinner__container .logo-deveser {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  cursor: pointer;
+  animation: fadeIn 1s;
+}
+
+.full-screen-spinner__container .logo-deveser a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.full-screen-spinner__container .logo-deveser p {
+  color: #fff;
+  font-size: 0.5rem;
+}
+
+.full-screen-spinner__container .logo-deveser img {
+  width: 3.25rem;
+}
+
+@keyframes spin { 
+  100%{transform: rotate(1turn)}
+}

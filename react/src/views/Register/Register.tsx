@@ -292,13 +292,40 @@ export const Register = () => {
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        PaperProps={{
+          sx: {
+            maxWidth: '28rem',
+            color: 'rgb(255 255 255 / 90%)',
+            backgroundColor: 'rgb(59 58 65 / 96%)',
+            boxShadow: '2px 2px 6px 0px #ffffff33',
+            '& h2': {
+              backgroundColor: 'rgb(0 0 0 / 20%)',
+              boxShadow: '0px 2px 3px -3px #ffffffa3',
+              fontSize: '1rem',
+            },
+            '& div.MuiDialogContent-root': {
+              paddingTop: '18px'
+            },
+            '& .MuiDialogContent-root p': {
+              color: 'rgb(255 255 255 / 80%)',
+              fontSize: '0.7rem',
+            },
+            '& button': {
+              color: 'rgb(222 177 66 / 92%)',
+            },
+            '& button:hover': {
+              color: 'rgb(254 182 4 / 100%)',
+            },
+          },
+        }}
+
       >
         <DialogTitle id="alert-dialog-title">
           Confirm registration
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ paddingTop: '24px' }}>
           <DialogContentText id="alert-dialog-description">
-            Thanks for signing up, we've emailed you a confirmation link, once you confirm your email, you can continue setting up your profile
+            Thanks for signing up, we've emailed you a confirmation link, once you confirm your email, you can continue setting up your profile.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

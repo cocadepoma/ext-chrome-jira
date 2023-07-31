@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  registerToken: String,
   boards: [categorySchema],
 });
 

@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../../contexts/auth';
 import img from '../../../img/128.png';
+import { AuthService } from '../../../services/AuthService';
 interface Props {
   onOrderBoards: () => void;
   onBoardAdd: () => void;
@@ -38,13 +39,18 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
     onOrderBoards();
   };
 
-  const onLogout = () => {
-    signout();
-    navigate('/login');
+  const onLogout = async () => {
+    try {
+      signout();
+      await AuthService.deleteToken();
+      navigate('/login');
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   return (
-    <AppBar position="fixed" elevation={0} sx={{ backgroundColor: '#ffffff', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem' }}>
+    <AppBar position="fixed" elevation={0} sx={{ backgroundColor: '#ffffff', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem', animation: 'fadeIn 0.3s' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', boxShadow: '2px 2px 5px -1px rgba(0,0,0,0.5)', minHeight: '2rem!important' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

@@ -53,7 +53,7 @@ const userEmailExists = async (req: Request, res: Response, next: NextFunction) 
     switch (path) {
       // If the path is new, is a register
       case '/kanbanify/api/auth/register':
-        if (user) {
+        if (user?.verified) {
           return res.status(409).json({
             msg: 'The user email already exists'
           });
@@ -127,9 +127,47 @@ const validatorJWT = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+const validatorRegisterJWT = (req: Request, res: Response, next: NextFunction) => {
+  // x-token headers
+  const { registerToken } = req.body;
+
+  if (!registerToken) {
+    return res.status(401).json({
+      ok: false,
+      msg: "Invalid register token",
+    });
+  }
+
+  try {
+    const { email } = jwt.verify(registerToken, jwtSecret);
+
+    if (!email) {
+      return res.status(401).json({
+        ok: false,
+        msg: "Invalid register token",
+      });
+    }
+
+    // @ts-ignore
+    req.token = registerToken;
+    // @ts-ignore
+    req.email = email;
+
+  } catch (error) {
+    console.log(error);
+    return res.status(401).json({
+      ok: false,
+      msg: "Invalid register token",
+    });
+  }
+
+  next();
+};
+
 export const middlewares = {
   userIdExists,
   userEmailExists,
   checkFields,
   validatorJWT,
+  validatorRegisterJWT,
 }

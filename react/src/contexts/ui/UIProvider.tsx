@@ -1,10 +1,12 @@
 import { FC, useReducer } from 'react';
 import { UIContext, uiReducer } from '.';
+import { FullScreenSpinner } from '../../components/ui/FullScreenSpinner/FullScreenSpinner';
 
 export interface UIState {
   sideMenuOpen: boolean;
   isAddingEntry: boolean;
   isDragging: boolean;
+  isAppLoading: boolean;
 }
 
 interface UIProviderProps {
@@ -15,6 +17,7 @@ const UI_INITIAL_STATE: UIState = {
   sideMenuOpen: false,
   isAddingEntry: false,
   isDragging: false,
+  isAppLoading: true,
 };
 
 export const UIProvider: FC<UIProviderProps> = ({ children }) => {
@@ -40,6 +43,14 @@ export const UIProvider: FC<UIProviderProps> = ({ children }) => {
     dispatch({ type: 'UI - End Dragging' });
   };
 
+  const onStopAppLoading = () => {
+    dispatch({ type: 'UI - Stop loading' });
+  };
+
+  const onStartAppLoading = () => {
+    dispatch({ type: 'UI - Start Dragging' });
+  };
+
   return (
     <UIContext.Provider
       value={{
@@ -49,8 +60,11 @@ export const UIProvider: FC<UIProviderProps> = ({ children }) => {
         setIsAddingEntry,
         onStartDragging,
         onEndDragging,
+        onStopAppLoading,
+        onStartAppLoading,
       }}
     >
+      {state.isAppLoading && <FullScreenSpinner />}
       {children}
     </UIContext.Provider>
   );

@@ -31,7 +31,12 @@ router.post(
 );
 
 // Confirm
-router.post('/kanbanify/api/auth/confirm', authController.confirm);
+router.post('/kanbanify/api/auth/confirm',
+  [
+    middlewares.validatorRegisterJWT,
+    middlewares.checkFields,
+  ], authController.confirm
+);
 
 // Refresh token
 router.post(

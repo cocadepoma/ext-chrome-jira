@@ -1,14 +1,27 @@
 import kanbanifyApi from "../api/kanbanify";
 import { UserResponse } from "../interfaces/user";
 
-const getToken = async (): Promise<string> => {
+const getEmail = async (): Promise<string> => {
   const resp = await chrome?.storage?.sync?.get(null);
 
-  return resp?.token ?? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJwYWNvcnM4OEBnbWFpbC5jb20tNjRjMWE5ZTA2MTc1NDUyYzMwZTFiMTkwIiwiZW1haWwiOiJwYWNvcnM4OEBnbWFpbC5jb20iLCJpYXQiOjE2OTA1MDIzMTUsImV4cCI6MTY5MDUwNTkxNX0.rI1ajMJvOJVdgRojTqnMFyqTGWJd1DVnXkJ4ZrrcXuE';
+  return resp?.email ?? '';
+};
+
+const setEmail = async (email: string) => {
+  await chrome?.storage?.sync?.set({ email });
+};
+
+const getToken = async (): Promise<string> => {
+  const resp = await chrome?.storage?.local?.get(null);
+  return resp?.token ?? '';
 };
 
 const setToken = async (token: string) => {
-  await chrome?.storage?.sync?.set({ token });
+  await chrome?.storage?.local?.set({ token });
+};
+
+const deleteToken = async () => {
+  await chrome?.storage?.local.remove('token');
 };
 
 interface AuthParams {
@@ -25,9 +38,17 @@ const register = async ({ email, password, signal }: AuthParams) => {
   return kanbanifyApi.post<UserResponse>('/api/auth/register', { email, password }, { signal });
 };
 
+const refresh = async () => {
+  return kanbanifyApi.post<UserResponse>('/api/auth/refresh');
+};
+
 export const AuthService = {
   getToken,
   setToken,
+  deleteToken,
+  getEmail,
+  setEmail,
   login,
   register,
+  refresh
 };

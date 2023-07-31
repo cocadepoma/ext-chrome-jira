@@ -26,6 +26,7 @@
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 3px 4px 10px -1px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.2s;
 }
 
 .home__list--container {

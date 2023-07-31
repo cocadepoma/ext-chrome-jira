@@ -18,6 +18,7 @@ export const authReducer = (state: UIState, action: AuthActionType): UIState => 
         ...state,
         email: action.payload.email,
         userId: action.payload.userId,
+        token: action.payload.token,
       };
 
     default:
