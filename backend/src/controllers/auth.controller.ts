@@ -32,7 +32,7 @@ const login = async (req: Request, res: Response) => {
 
     // If the email and password are correct, generate and return a JWT
     const uid = `${user.email}-${user._id}`;
-    const token = jwt.sign({ uid, email: user.email }, jwtSecret, { expiresIn: 60 });
+    const token = jwt.sign({ uid, email: user.email }, jwtSecret, { expiresIn: '4h' });
 
     return res.json({ boards: user.boards, token, email, id: user._id });
   } catch (error) {
@@ -168,7 +168,7 @@ const refresh = async (req: Request, res: Response) => {
   const { uid, email } = req;
 
   try {
-    const newAccessToken = jwt.sign({ uid, email }, jwtSecret, { expiresIn: 60 });
+    const newAccessToken = jwt.sign({ uid, email }, jwtSecret, { expiresIn: '4h' });
     const user = await User.findOne({ email });
 
     // Return the new access token
