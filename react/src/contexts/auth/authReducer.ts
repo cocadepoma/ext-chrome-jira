@@ -3,6 +3,7 @@ import { UIState } from '.';
 export type AuthActionType =
   | { type: 'Auth - Logout' }
   | { type: 'Auth - Login', payload: UIState }
+  | { type: 'Auth - Load email', payload: { email: string } }
 
 export const authReducer = (state: UIState, action: AuthActionType): UIState => {
   switch (action.type) {
@@ -19,6 +20,12 @@ export const authReducer = (state: UIState, action: AuthActionType): UIState => 
         email: action.payload.email,
         userId: action.payload.userId,
         token: action.payload.token,
+      };
+
+    case 'Auth - Load email':
+      return {
+        ...state,
+        email: action.payload.email,
       };
 
     default:

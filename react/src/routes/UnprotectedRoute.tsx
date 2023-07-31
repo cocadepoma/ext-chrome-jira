@@ -12,7 +12,7 @@ interface UnprotectedRouteProps {
 
 export const UnprotectedRoute = ({ children }: UnprotectedRouteProps) => {
   const navigate = useNavigate();
-  const { signin } = useContext(AuthContext);
+  const { signin, loadEmail } = useContext(AuthContext);
   const { onStopAppLoading } = useContext(UIContext);
   const { loadBoards } = useContext(BoardsContext);
 
@@ -22,7 +22,13 @@ export const UnprotectedRoute = ({ children }: UnprotectedRouteProps) => {
 
   const checkAuthentication = async () => {
     const token = await AuthService.getToken();
+    const email = await AuthService.getEmail();
+
+
     if (!token) {
+      if (email) {
+        loadEmail({ email });
+      }
       await sleep(250);
       onStopAppLoading();
       return;

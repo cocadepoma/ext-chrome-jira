@@ -48,14 +48,16 @@ export const Register = () => {
   const [autoFocus, setIsAutoFocus] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useLayoutEffect(() => {
     focusToInput();
-  }, []);
+  }, [inputRef.current]);
 
   const focusToInput = async () => {
-    // if (!inputRef.current) return;
+    if (!inputRef.current) return;
     await sleep(500);
+    (inputRef.current?.children[1] as HTMLInputElement).focus()
     setIsAutoFocus(true);
   };
 
@@ -153,6 +155,7 @@ export const Register = () => {
         <div className="register__group">
           <label htmlFor="email">Email</label>
           <TextField
+            // ref={inputref}
             focused={autoFocus}
             autoComplete="off"
             id="email"
@@ -163,6 +166,7 @@ export const Register = () => {
             placeholder="example@email.com"
             sx={{ height: '2.3rem' }}
             InputProps={{
+              ref: inputRef,
               sx: inputFormStyles,
               startAdornment: <PersonOutline sx={{ color: 'rgb(213, 213, 213)', marginRight: '0.5rem', fontSize: '1rem' }} />,
             }}

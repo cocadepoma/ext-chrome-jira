@@ -20,16 +20,6 @@ const AUTH_INITIAL_STATE: UIState = {
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
 
-  const onRegister = async ({ email, password }: { email: string, password: string }) => {
-    // TODO: perform register
-    // dispatch({ type: 'Auth - Login', payload: { email, userId } });
-  };
-
-  const onLogin = async ({ email, password }: { email: string, password: string }) => {
-    // TODO: perform login
-    // dispatch({ type: 'Auth - Login', payload: { email, userId } });
-  };
-
   const signin = ({ email, userId, token }: UIState) => {
     dispatch({ type: 'Auth - Login', payload: { email, userId, token } });
   };
@@ -38,14 +28,17 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     dispatch({ type: 'Auth - Logout' });
   };
 
+  const loadEmail = ({ email }: { email: string }) => {
+    dispatch({ type: 'Auth - Load email', payload: { email } });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        onRegister,
-        onLogin,
         signin,
         signout,
+        loadEmail,
       }}
     >
       {children}

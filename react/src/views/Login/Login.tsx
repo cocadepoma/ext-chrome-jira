@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { LockOutlined, PersonOutline, Visibility, VisibilityOff } from "@mui/icons-material";
@@ -19,24 +19,53 @@ import './styles.css';
 export const Login = () => {
   const navigate = useNavigate();
 
-  const { signin } = useContext(AuthContext);
+  const { signin, email } = useContext(AuthContext);
   const { loadBoards } = useContext(BoardsContext);
   const { isAppLoading } = useContext(UIContext);
 
   const [form, setForm] = useState({
-    email: '',
+    email: email ?? '',
     password: '',
   });
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [autoFocus, setIsAutoFocus] = useState<'email' | 'password' | null>(null);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('User or email not valid');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const inputPasswordRef = useRef<HTMLInputElement>(null);
+
+  useLayoutEffect(() => {
+    focusToInput();
+  }, [inputRef.current, isAppLoading]);
+
+  useEffect(() => {
+    if (!email || email.length > 0 && form.email.length > 0) return;
+    setForm({
+      ...form,
+      email
+    });
+  }, [email]);
+
+  const focusToInput = async () => {
+    if (!inputRef.current || isAppLoading) return;
+    await sleep(200);
+
+    if (!email) {
+      (inputRef.current?.children[1] as HTMLInputElement).focus();
+      setIsAutoFocus('email');
+    } else {
+      (inputPasswordRef.current?.children[1] as HTMLInputElement).focus();
+      setIsAutoFocus('password');
+    }
+  };
 
   const onSubmit = async () => {
     setIsFormSubmitted(true);
@@ -105,7 +134,7 @@ export const Login = () => {
         <div className="login__group">
           <label htmlFor="email">Email</label>
           <TextField
-            autoFocus={!isAppLoading}
+            focused={autoFocus === 'email'}
             autoComplete="off"
             id="email"
             name="email"
@@ -115,6 +144,7 @@ export const Login = () => {
             placeholder="example@email.com"
             sx={{ height: '2.3rem' }}
             InputProps={{
+              ref: inputRef,
               sx: inputFormStyles,
               startAdornment: <PersonOutline sx={{ color: 'rgb(213, 213, 213)', marginRight: '0.5rem', fontSize: '1rem' }} />,
             }}
@@ -129,6 +159,7 @@ export const Login = () => {
         <div className="login__group">
           <label htmlFor="password">Password</label>
           <TextField
+            focused={autoFocus === 'password'}
             id="password"
             name="password"
             type={isPasswordShown ? 'text' : 'password'}
@@ -137,6 +168,7 @@ export const Login = () => {
             placeholder="**********"
             sx={{ height: '2.3rem' }}
             InputProps={{
+              ref: inputPasswordRef,
               sx: inputFormStyles,
               startAdornment: <LockOutlined sx={{ color: 'rgb(213, 213, 213)', marginRight: '0.5rem', fontSize: '1rem' }} />,
               endAdornment: (

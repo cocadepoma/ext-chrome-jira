@@ -6,10 +6,9 @@ export interface ContextProps {
   email: string | null;
   token: string | null;
 
-  onRegister: ({ email, password }: { email: string, password: string }) => Promise<void>;
-  onLogin: ({ email, password }: { email: string, password: string }) => Promise<void>;
   signin: ({ email, userId }: UIState) => void;
   signout: VoidFunction;
+  loadEmail: ({ email }: { email: string }) => void;
 }
 
 export const AuthContext = createContext({} as ContextProps);
