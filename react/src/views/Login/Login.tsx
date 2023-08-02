@@ -2,22 +2,25 @@ import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 import { LockOutlined, PersonOutline, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Alert, Button, CircularProgress, IconButton, Snackbar, TextField } from "@mui/material";
+import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
 
 import { AuthContext } from "../../contexts/auth";
 import { BoardsContext } from "../../contexts/boards";
 import { AuthService } from "../../services/AuthService";
 
 import { inputFormStyles } from "../../styles/muiOverrides";
-import { sleep } from "../../utils";
+import { isValidEmail, sleep } from "../../utils";
 
 import { UIContext } from "../../contexts/ui";
 
 
+import { useSnackbar } from "notistack";
+import { RecoveryDialog } from "./components/RecoveryDialog/RecoveryDialog";
 import './styles.css';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { signin, email } = useContext(AuthContext);
   const { loadBoards } = useContext(BoardsContext);
@@ -33,8 +36,7 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [autoFocus, setIsAutoFocus] = useState<'email' | 'password' | null>(null);
 
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('User or email not valid');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
@@ -90,13 +92,19 @@ export const Login = () => {
       navigate('/boards');
     } catch (error: any) {
       console.warn(error);
+      let message = 'User or email not valid';
 
       if (error?.response?.data?.message === 'User not verified') {
-        setSnackbarMessage('Account not activated yet, please check your email');
-      } else {
-        setSnackbarMessage('User or email not valid');
+        message = 'Account not activated yet, please check your email';
       }
-      setShowSnackbar(true);
+      enqueueSnackbar(message, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
     } finally {
       setIsLoading(false);
     }
@@ -109,11 +117,6 @@ export const Login = () => {
     });
   };
 
-  const isValidEmail = (email: string) => {
-    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return mailformat.test(email);
-  };
-
   const navigationToRegister = async () => {
     containerRef.current?.classList.add('leave');
     actionsRef.current?.classList.add('leave');
@@ -122,8 +125,8 @@ export const Login = () => {
     navigate('/register');
   };
 
-  const handleCloseSnackbar = () => {
-    setShowSnackbar(false);
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -209,17 +212,13 @@ export const Login = () => {
 
       <div ref={actionsRef} className="login__actions">
         <h5 onClick={navigationToRegister}>Create Account</h5>
-        <h5>Forgot password?</h5>
+        <h5 onClick={() => setIsDialogOpen(true)}>Forgot password?</h5>
       </div>
 
-      <Snackbar anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} open={showSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: '15rem', fontSize: '0.65rem' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      <RecoveryDialog
+        isDialogOpen={isDialogOpen}
+        handleCloseDialog={handleCloseDialog}
+      />
     </div >
   )
 }

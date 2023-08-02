@@ -45,4 +45,25 @@ router.post(
   authController.refresh
 );
 
+// Recovery
+router.post(
+  '/kanbanify/api/auth/recovery',
+  [
+    check("password", "The password must be at least 6 characters").isLength({ min: 6 }),
+    middlewares.validatorRegisterJWT,
+    middlewares.checkFields,
+  ],
+  authController.recovery
+);
+
+// Recovery email
+router.post(
+  '/kanbanify/api/auth/recovery/email',
+  [
+    check("email", "The email is required").isEmail(),
+    middlewares.checkFields,
+  ],
+  authController.recoveryEmail
+);
+
 export const authRoutes = router;

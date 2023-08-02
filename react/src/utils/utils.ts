@@ -20,3 +20,13 @@ export const getTicketTime = (time: number) => {
 }
 export const sleep = (value: number) =>
   new Promise(resolve => setTimeout(resolve, value));
+
+export const isValidEmail = (email: string) => {
+  const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return mailformat.test(email);
+};
+
+export const isValidPassword = (password: string) => {
+  const passwordFormat = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){1,20}$/;
+  return !passwordFormat.test(password);
+};

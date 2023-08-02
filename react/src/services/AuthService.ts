@@ -42,6 +42,15 @@ const refresh = async () => {
   return kanbanifyApi.post<UserResponse>('/api/auth/refresh');
 };
 
+interface RecoveryEmailParams {
+  email: string;
+  signal?: AbortSignal
+}
+
+const recoveryEmail = async ({ email, signal }: RecoveryEmailParams) => {
+  return kanbanifyApi.post<UserResponse>('/api/auth/recovery/email', { email }, { signal });
+};
+
 export const AuthService = {
   getToken,
   setToken,
@@ -50,5 +59,6 @@ export const AuthService = {
   setEmail,
   login,
   register,
-  refresh
+  refresh,
+  recoveryEmail,
 };

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { LockOutlined, PersonOutline } from "@mui/icons-material";
 import {
-  Alert,
   Button,
   Checkbox,
   CircularProgress,
@@ -13,21 +12,22 @@ import {
   DialogContentText,
   DialogTitle,
   FormControlLabel,
-  Snackbar,
   TextField
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 import { AuthContext } from "../../contexts/auth";
 import { BoardsContext } from "../../contexts/boards";
 
 import { AuthService } from "../../services/AuthService";
 import { inputFormStyles } from "../../styles/muiOverrides";
-import { sleep } from "../../utils";
+import { isValidEmail, isValidPassword, sleep } from "../../utils";
 
 import './styles.css';
 
 export const Register = () => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { signin } = useContext(AuthContext);
   const { loadBoards } = useContext(BoardsContext);
@@ -41,8 +41,6 @@ export const Register = () => {
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('Error while trying to register your account');
   const [emailError, setEmailError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [autoFocus, setIsAutoFocus] = useState(false);
@@ -83,14 +81,19 @@ export const Register = () => {
       setIsDialogOpen(true);
     } catch (error: any) {
       console.warn(error);
-
-      if (error.response.status === 409) {
-        setSnackbarMessage('An user already exists with that email');
+      let message = 'Error while trying to register your account';
+      if (error?.response?.status === 409) {
+        message = 'An user already exists with that email';
         setEmailError(true);
-      } else {
-        setSnackbarMessage('Error while trying to register your account');
       }
-      setShowSnackbar(true);
+      enqueueSnackbar(message, {
+        variant: 'error',
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: 'right',
+          vertical: 'bottom'
+        }
+      });
     } finally {
       setIsLoading(false);
     }
@@ -104,16 +107,6 @@ export const Register = () => {
         ? !form.terms
         : event.target.value
     });
-  };
-
-  const isValidEmail = (email: string) => {
-    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return mailformat.test(email);
-  };
-
-  const isValidPassword = (password: string) => {
-    const passwordFormat = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){1,20}$/;
-    return !passwordFormat.test(password);
   };
 
   const getLabelPasswordInput = () => {
@@ -139,10 +132,6 @@ export const Register = () => {
     navigate('/login')
   };
 
-  const handleCloseSnackbar = () => {
-    setShowSnackbar(false);
-  };
-
   const handleCloseDialog = () => {
     navigate('/login');
   };
@@ -155,7 +144,6 @@ export const Register = () => {
         <div className="register__group">
           <label htmlFor="email">Email</label>
           <TextField
-            // ref={inputref}
             focused={autoFocus}
             autoComplete="off"
             id="email"
@@ -282,15 +270,6 @@ export const Register = () => {
         <h5 onClick={navigateToLogin}>Already have an account?</h5>
       </div>
 
-      <Snackbar anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }} open={showSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: '15rem', fontSize: '0.65rem' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-
       <Dialog
         open={isDialogOpen}
         onClose={handleCloseDialog}
@@ -324,11 +303,11 @@ export const Register = () => {
         }}
 
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle>
           Confirm registration
         </DialogTitle>
         <DialogContent sx={{ paddingTop: '24px' }}>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             Thanks for signing up, we've emailed you a confirmation link, once you confirm your email, you can continue setting up your profile.
           </DialogContentText>
         </DialogContent>

@@ -74,7 +74,7 @@ export const BoardsProvider: FC<BoardsProviderProps> = ({ children }) => {
             horizontal: 'right',
             vertical: 'bottom'
           }
-        })
+        });
       }
     } catch (error) {
       console.warn({ error });

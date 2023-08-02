@@ -128,28 +128,35 @@ const validatorJWT = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const validatorRegisterJWT = (req: Request, res: Response, next: NextFunction) => {
-  // x-token headers
-  const { registerToken } = req.body;
+  const { path } = req.route;
 
-  if (!registerToken) {
+  let token = ''
+  if (path === '/kanbanify/api/auth/confirm') {
+    token = req.body.registerToken
+  }
+  if (path === '/kanbanify/api/auth/recovery') {
+    token = req.body.recoveryToken
+  }
+
+  if (!token) {
     return res.status(401).json({
       ok: false,
-      msg: "Invalid register token",
+      msg: "Invalid token",
     });
   }
 
   try {
-    const { email } = jwt.verify(registerToken, jwtSecret);
+    const { email } = jwt.verify(token, jwtSecret);
 
     if (!email) {
       return res.status(401).json({
         ok: false,
-        msg: "Invalid register token",
+        msg: "Invalid token",
       });
     }
 
     // @ts-ignore
-    req.token = registerToken;
+    req.token = token;
     // @ts-ignore
     req.email = email;
 
@@ -157,7 +164,7 @@ const validatorRegisterJWT = (req: Request, res: Response, next: NextFunction) =
     console.log(error);
     return res.status(401).json({
       ok: false,
-      msg: "Invalid register token",
+      msg: "Invalid token",
     });
   }
 
