@@ -41,8 +41,7 @@ export const RecoveryDialog = ({
     if (!isValidEmail(recoveryEmail)) return;
 
     setIsLoading(true);
-
-    await sleep(300);
+    await sleep(500);
 
     try {
       await AuthService.recoveryEmail({ email: recoveryEmail });
@@ -88,80 +87,76 @@ export const RecoveryDialog = ({
           Password recovery
         </DialogTitle>
 
-        <DialogContent sx={{ paddingTop: '24px', backgroundColor: 'rgb(59 58 65 / 96%)' }}>
-          {
-            !isLoading && !isRecoverySuccessful && (
-              <>
-                <DialogContentText sx={{
-                  paddingTop: '18px',
-                  color: 'rgb(255 255 255 / 80%)',
-                  fontSize: '0.7rem',
-                }}>
-                  Please enter your username or email address. You will receive a link to create a new password via email.
-                </DialogContentText>
+        {
+          !isLoading && !isRecoverySuccessful && (
+            <DialogContent sx={{ paddingTop: '24px', backgroundColor: 'rgb(59 58 65 / 96%)', display: 'flex', flexDirection: 'column' }}>
+              <DialogContentText sx={{
+                paddingTop: '18px',
+                color: 'rgb(255 255 255 / 80%)',
+                fontSize: '0.7rem',
+              }}>
+                Please enter your username or email address. You will receive a link to create a new password via email.
+              </DialogContentText>
 
-                <TextField
-                  fullWidth
-                  autoFocus
-                  autoComplete="off"
-                  id="email"
-                  name="email"
-                  type="email"
-                  onChange={handleRecoveryEmailChange}
-                  value={recoveryEmail}
-                  placeholder="Username or email"
-                  sx={{ height: '1rem' }}
-                  InputProps={{
-                    sx: {
-                      ...inputFormStyles,
-                      borderRadius: '3px',
-                      marginTop: '1rem',
-                      '& input': {
-                        height: '2rem',
-                        padding: '0 0.5rem',
-                      }
-                    },
-                  }}
-                  FormHelperTextProps={{
-                    sx: { fontSize: '.5rem' }
-                  }}
-                  error={isRecoveryFormSubmitted && !isValidEmail(recoveryEmail)}
-                  helperText={isRecoveryFormSubmitted && !isValidEmail(recoveryEmail) && 'The email is not a valid email'}
-                />
-              </>
-            )
-          }
+              <TextField
+                fullWidth
+                autoFocus
+                autoComplete="off"
+                id="email"
+                name="email"
+                type="email"
+                onChange={handleRecoveryEmailChange}
+                value={recoveryEmail}
+                placeholder="Username or email"
+                sx={{ height: '1rem' }}
+                InputProps={{
+                  sx: {
+                    ...inputFormStyles,
+                    borderRadius: '3px',
+                    marginTop: '1rem',
+                    '& input': {
+                      height: '2rem',
+                      padding: '0 0.5rem',
+                    }
+                  },
+                }}
+                FormHelperTextProps={{
+                  sx: { fontSize: '.5rem' }
+                }}
+                error={isRecoveryFormSubmitted && !isValidEmail(recoveryEmail)}
+                helperText={isRecoveryFormSubmitted && !isValidEmail(recoveryEmail) && 'The email is not a valid email'}
+              />
+            </DialogContent>
+          )
+        }
 
-          {
-            isLoading && (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CircularProgress size={20} sx={{ color: 'rgb(213, 213, 213)' }} />
-              </div>
-            )
-          }
+        {
+          !isLoading && isRecoverySuccessful && (
+            <DialogContent sx={{ paddingTop: '24px', backgroundColor: 'rgb(59 58 65 / 96%)', display: 'flex', flexDirection: 'column' }}>
+              <DialogContentText sx={{
+                paddingTop: '18px',
+                color: 'rgb(255 255 255 / 80%)',
+                fontSize: '0.7rem',
+              }}>
+                An email has been sent to your registered email address.
+              </DialogContentText>
+              <DialogContentText sx={{
+                color: 'rgb(255 255 255 / 80%)',
+                fontSize: '0.7rem',
+              }}>
+                Please follow the instructions in the email to reset your password.
+              </DialogContentText>
+            </DialogContent>
+          )
+        }
 
-          {
-            !isLoading && isRecoverySuccessful && (
-              <>
-                <DialogContentText sx={{
-                  paddingTop: '18px',
-                  color: 'rgb(255 255 255 / 80%)',
-                  fontSize: '0.7rem',
-                }}>
-                  An email has been sent to your registered email address.
-                </DialogContentText>
-                <DialogContentText sx={{
-                  color: 'rgb(255 255 255 / 80%)',
-                  fontSize: '0.7rem',
-                }}>
-                  Please follow the instructions in the email to reset your password.
-                </DialogContentText>
-              </>
-
-            )
-          }
-        </DialogContent>
-
+        {
+          isLoading && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, }}>
+              <CircularProgress size={24} sx={{ color: 'rgb(213, 213, 213)' }} />
+            </div>
+          )
+        }
         <DialogActions sx={{ gap: '0.75rem', marginBottom: '0.5rem', backgroundColor: 'rgb(59 58 65 / 96%)', }}>
           {!isLoading && !isRecoverySuccessful && (
             <>
