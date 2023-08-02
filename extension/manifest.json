@@ -1,7 +1,7 @@
 {
   "name": "Kanbanify",
   "description": "Application for keeping you notes tidy and organized",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "manifest_version": 3,
   "permissions": [
     "storage",
