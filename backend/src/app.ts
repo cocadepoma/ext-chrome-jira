@@ -18,7 +18,7 @@ const app = express();
 
 const limit1h = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 3, // Allow a maximum of 3 password recovery requests per IP per hour
+  max: 5, // Allow a maximum of 3 password recovery requests per IP per hour
 });
 
 const limit10mins = rateLimit({
