@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material"
+import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export const EmptyBoard = ({ onBoardAdd }: { onBoardAdd: () => void }) => {
@@ -6,10 +6,10 @@ export const EmptyBoard = ({ onBoardAdd }: { onBoardAdd: () => void }) => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-      <Typography variant="h1" sx={{ fontSize: '1.4rem' }}>You don&apos; t have any board yet,
+      <Typography variant="h1" sx={{ fontSize: '1.4rem', color: '#fff' }}>You don&apos; t have any board yet,
         <span
           onClick={onBoardAdd}
-          style={{ color: '#2883FF', cursor: 'pointer' }}> add one</span>.
+          style={{ color: 'orange', cursor: 'pointer' }}> add one</span>.
       </Typography>
     </div>
   )
