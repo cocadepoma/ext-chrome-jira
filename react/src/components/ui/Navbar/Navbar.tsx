@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/auth';
 import img from '../../../img/128.png';
 import { AuthService } from '../../../services/AuthService';
+import { menuItemStyles } from '../../../styles/muiOverrides';
 interface Props {
   onOrderBoards: () => void;
   onBoardAdd: () => void;
@@ -50,8 +51,8 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
   };
 
   return (
-    <AppBar position="fixed" elevation={0} sx={{ backgroundColor: '#ffffff', boxShadow: '0px 3px 7px -3px #ffffff59', width: '800px', left: 0, height: '2rem', animation: 'fadeIn 0.3s' }}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', boxShadow: '2px 2px 5px -1px rgba(0,0,0,0.5)', minHeight: '2rem!important' }}>
+    <AppBar position="fixed" elevation={0} sx={{ backgroundColor: 'var(--gray-heading)', boxShadow: '0px 3px 6px -1px #ffffff40', width: '800px', left: 0, height: '2rem', animation: 'fadeIn 0.3s' }}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', minHeight: '2rem!important' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <img
@@ -63,7 +64,7 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             style={{ cursor: 'pointer', filter: 'drop-shadow(rgba(0, 0, 0, 0.4) 1px 1px 3px)' }}
           />
 
-          <Typography variant="h6" sx={{ color: 'rgba(0,0,0,0.7)', fontSize: '1rem' }}>Kanbanify</Typography>
+          <Typography variant="h6" sx={{ color: 'rgb(255, 255, 255)', fontSize: '1rem' }}>Kanbanify</Typography>
         </div>
 
         <div>
@@ -75,17 +76,23 @@ export const Navbar = ({ onBoardAdd, onOrderBoards }: Props) => {
             MenuListProps={{
               'aria-labelledby': 'basic-button',
             }}
+            PaperProps={{
+              sx: {
+                backgroundColor: 'var(--gray-body)',
+                boxShadow: 'var(--shadow-2)'
+              }
+            }}
           >
-            <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onAddBoardClick}><Add sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Add new board</MenuItem>
-            <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onBoardsOrderClick}> <LowPriority sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Order boards</MenuItem>
-            <MenuItem sx={{ fontSize: '0.7rem' }} onClick={onLogout}> <TransitEnterexit sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Logout</MenuItem>
+            <MenuItem sx={menuItemStyles} onClick={onAddBoardClick}><Add sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Add new board</MenuItem>
+            <MenuItem sx={menuItemStyles} onClick={onBoardsOrderClick}> <LowPriority sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Order boards</MenuItem>
+            <MenuItem sx={menuItemStyles} onClick={onLogout}> <TransitEnterexit sx={{ width: '1rem', height: '1rem', marginRight: '1rem' }} />Logout</MenuItem>
           </Menu>
 
           {
             location.pathname === '/boards' && (
               <Tooltip title="Board options">
                 <IconButton size="small" edge="start" onClick={handleClick}>
-                  <Dashboard sx={{ width: '1rem', height: '1rem' }} />
+                  <Dashboard sx={{ width: '1rem', height: '1rem', color: 'white' }} />
                 </IconButton>
               </Tooltip>
             )

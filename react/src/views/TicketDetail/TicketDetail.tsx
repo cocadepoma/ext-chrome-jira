@@ -15,6 +15,7 @@ import { BoardsContext } from '../../contexts/boards/BoardsContext';
 import { DeleteEntryDialog } from "../../components/ui";
 
 import { Category, Entry } from "../../interfaces";
+import { agreeButtonStyles, backButtonStyles, boardsTextField, cancelButtonStyles } from "../../styles/muiOverrides";
 import { getTicketTime } from "../../utils";
 
 export const TicketDetail = () => {
@@ -173,28 +174,38 @@ export const TicketDetail = () => {
       >
         {ticket && (
           <Grid item sx={{ width: '59%' }}>
-            <Card sx={{ backgroundColor: '#e8e8e8' }}>
+            <Card sx={{ backgroundColor: 'var(--gray-dark)', boxShadow: 'var(--shadow-xy)' }}>
               <CardHeader
-                sx={{ padding: '10px 16px 0 16px' }}
+                sx={{ padding: '10px 16px 9px 16px', backgroundColor: 'var(--gray-heading)' }}
                 title={`Ticket: ${form.description.length > 35 ? form.description.substring(0, 35) + ' ...' : form.description}`}
                 subheader={`Created ${getTicketTime(ticket.createdAt)}`}
-                titleTypographyProps={{ style: { fontSize: '0.8rem', color: 'rgba(15, 70, 147, 0.787)', fontWeight: 'bold' } }}
-                subheaderTypographyProps={{ style: { fontSize: '0.6rem' } }}
+                titleTypographyProps={{ style: { fontSize: '0.8rem', color: 'orange', fontWeight: 'bold' } }}
+                subheaderTypographyProps={{ style: { fontSize: '0.6rem', color: 'white' } }}
               />
 
               <CardContent>
-
                 <TextField
                   sx={{
+                    ...boardsTextField,
+                    '& div.MuiInputBase-root': {
+                      color: 'white',
+                      height: 'auto',
+                      backgroundColor: 'transparent'
+                    },
+                    '& legend': {
+                      width: '2.2rem'
+                    },
                     marginBottom: '14px', fontSize: 10,
-                    '& .MuiInputBase-root': { padding: '8.5px 14px', backgroundColor: '#ffffff8a' },
+                    '& .MuiInputBase-root': {
+                      padding: '8.5px 14px',
+                      color: 'white',
+                    },
                     '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-4px', left: '2px' },
                     '& .MuiFormLabel-root.MuiInputLabel-shrink': { top: '2px' },
                   }}
                   fullWidth
                   multiline
                   rows={2}
-                  maxRows={2}
                   label="Name"
                   name="description"
                   onChange={onFieldChange}
@@ -207,6 +218,19 @@ export const TicketDetail = () => {
                 <FormControl fullWidth>
                   <Autocomplete
                     sx={{
+                      ...boardsTextField,
+                      height: '3.5rem',
+                      '& div.MuiInputBase-root': {
+                        color: 'white',
+                        height: 'auto',
+                        backgroundColor: 'transparent',
+                        '& .MuiAutocomplete-endAdornment button': {
+                          color: '#fff'
+                        }
+                      },
+                      '& legend': {
+                        width: '2.3rem'
+                      },
                       '& .MuiInputBase-root': { padding: '4px 10px', backgroundColor: '#ffffff8a' },
                       '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-3px', left: '2px' },
                       '& .MuiInputLabel-root.MuiInputLabel-shrink': { top: '2px' },
@@ -214,13 +238,25 @@ export const TicketDetail = () => {
                     ListboxProps={{ style: { fontSize: '0.8rem' } }}
                     clearOnEscape
                     selectOnFocus
+
                     fullWidth
                     id="combo-box-demo"
                     options={boards}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option: any, value: any) => option.name === value.name}
                     renderOption={(props, option) => (
-                      <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                      <Box component="li" sx={{
+                        backgroundColor: 'var(--gray-heading)',
+                        color: '#fff',
+                        '&:hover': {
+                          backgroundColor: 'var(--gray-body)!important',
+                        },
+                        '&[aria-selected="true"]': {
+                          backgroundColor: 'var(--gray-light)!important',
+                        },
+                      }}
+                        {...props}
+                      >
                         {option.name}
                       </Box>
                     )}
@@ -233,6 +269,16 @@ export const TicketDetail = () => {
 
                 <TextField
                   sx={{
+                    ...boardsTextField,
+                    height: '8.5rem',
+                    '& div.MuiInputBase-root': {
+                      color: 'white',
+                      height: 'auto',
+                      backgroundColor: 'transparent'
+                    },
+                    '& legend': {
+                      width: '3.5rem'
+                    },
                     marginBottom: '14px',
                     marginTop: '14px',
                     '& .MuiInputBase-root': { backgroundColor: '#ffffff8a' },
@@ -251,7 +297,7 @@ export const TicketDetail = () => {
                   value={form.content}
                 />
 
-                <Typography variant="body1" sx={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                <Typography variant="body1" sx={{ color: '#fff', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
                   Ticket Color:
                   <span style={{
                     boxShadow: '1px 1px 2px -1px rgba(0,0,0,0.6)',
@@ -270,29 +316,29 @@ export const TicketDetail = () => {
                 <Button
                   size="small"
                   variant="contained"
-                  color="info"
+                  color="warning"
                   startIcon={<UndoIcon />}
                   onClick={() => navigate('/boards')}
-                  sx={{ fontSize: '0.8rem' }}
+                  sx={backButtonStyles}
                 >
                   Back
                 </Button>
 
                 <div>
                   <Button
+                    sx={cancelButtonStyles}
                     size="small"
                     variant="outlined"
                     color="error"
                     startIcon={<DeleteOutline />}
                     onClick={() => setActiveDeleteTicket(true)}
-                    sx={{ fontSize: '0.8rem', backgroundColor: '#ffffff8a' }}
                   >
                     Delete
                   </Button>
 
                   <Button
                     size="small"
-                    sx={{ marginLeft: '1rem', fontSize: '0.8rem', backgroundColor: '#ffffff8a' }}
+                    sx={{ ...agreeButtonStyles, marginLeft: '1rem', marginRight: '0rem', }}
                     variant="outlined"
                     color="info"
                     startIcon={<SaveOutlined />}

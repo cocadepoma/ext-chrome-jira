@@ -1,6 +1,7 @@
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material"
 
+import { agreeButtonStyles, boardsTextField, cancelButtonStyles } from "../../../styles/muiOverrides";
 import styles from './AddEntryDialog.module.css';
 
 interface Props {
@@ -39,11 +40,27 @@ export const AddEntryDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} PaperProps={{ sx: { width: '400px', maxWidth: '400px' } }}>
-      <DialogTitle>New ticket</DialogTitle>
-      <DialogContent>
-        <DialogContentText sx={{ margin: '10px 0' }}>
-          Add a new ticket to the board: <strong style={{ color: 'rgba(15, 70, 147, 0.787)' }}>{board?.name}</strong>
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      PaperProps={{
+        sx: {
+          backgroundColor: 'var(--gray-body)',
+          width: '360px',
+          maxWidth: '360px',
+          padding: '1rem',
+          boxShadow: 'var(--shadow-2)'
+        }
+      }}
+    >
+      <DialogTitle sx={{ fontSize: '0.9rem', color: 'white', padding: 0 }}>New ticket</DialogTitle>
+      <DialogContent sx={{ color: 'white', padding: 0, paddingTop: '5px!important' }}>
+        <DialogContentText sx={{
+          color: 'rgb(255 255 255 / 80%)',
+          fontSize: '0.7rem',
+          margin: '10px 0'
+        }}>
+          Add a new ticket to the board: <strong style={{ color: 'rgb(25 111 230)' }}>{board?.name}</strong>
         </DialogContentText>
         <TextField
           className={styles['new-entry-dialog__textfield']}
@@ -56,11 +73,12 @@ export const AddEntryDialog = ({
           value={inputValue}
           onChange={onTextChange}
           onBlur={() => setIsTouched(true)}
+          sx={{ ...boardsTextField, marginBottom: '0.5rem', }}
         />
       </DialogContent>
-      <DialogActions style={{ display: 'flex', justifyContent: 'space-between', padding: '0 1.1rem 1.1rem 1.1rem' }}>
-        <Button color="error" variant="outlined" onClick={handleClose}>Cancel</Button>
-        <Button color="info" variant="outlined" onClick={onSave}>Confirm</Button>
+      <DialogActions style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button sx={cancelButtonStyles} variant="outlined" onClick={handleClose}>Cancel</Button>
+        <Button sx={{ ...agreeButtonStyles, marginRight: '0rem', }} variant="outlined" onClick={onSave}>Confirm</Button>
       </DialogActions>
     </Dialog>
   )

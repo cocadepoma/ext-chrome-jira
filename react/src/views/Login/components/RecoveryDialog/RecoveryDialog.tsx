@@ -2,7 +2,7 @@ import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogC
 import { useSnackbar } from 'notistack';
 import React, { useState } from 'react';
 import { AuthService } from '../../../../services/AuthService';
-import { inputFormStyles } from '../../../../styles/muiOverrides';
+import { agreeButtonStyles, cancelButtonStyles, inputFormStyles } from '../../../../styles/muiOverrides';
 import { isValidEmail, sleep } from '../../../../utils';
 
 interface Props {
@@ -163,29 +163,14 @@ export const RecoveryDialog = ({
               <Button
                 variant="outlined"
                 onClick={handleClose}
-                sx={{
-                  border: '1px solid #c63131',
-                  color: '#c63131',
-                  '&:hover': {
-                    color: 'red',
-                    border: '1px solid red',
-                  },
-                }}
+                sx={cancelButtonStyles}
               >
                 Cancel
               </Button>
               <Button
                 variant="outlined"
                 onClick={handleSubmitDialog}
-                sx={{
-                  marginRight: '1rem',
-                  border: '1px solid #b77f17',
-                  color: '#b77f17',
-                  '&:hover': {
-                    color: 'orange',
-                    border: '1px solid orange',
-                  },
-                }}
+                sx={agreeButtonStyles}
               >
                 Agree
               </Button>

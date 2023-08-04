@@ -1,10 +1,10 @@
-import { AddCircleOutlineOutlined } from "@mui/icons-material";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField } from "@mui/material"
-import { ChangeEvent, useContext, useState } from "react";
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
+import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { useContext } from "react";
+import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { BoardsContext } from "../../../contexts/boards";
 import { Category } from "../../../interfaces";
 
+import { agreeButtonStyles } from "../../../styles/muiOverrides";
 import styles from './OrderBoardDialog.module.css';
 
 interface Props {
@@ -41,8 +41,15 @@ export const OrderBoardDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} PaperProps={{ sx: { width: '400px', maxWidth: '400px' } }}>
-      <DialogContent sx={{ padding: '10px' }}>
+    <Dialog open={isOpen} onClose={handleClose} PaperProps={{
+      sx: {
+        width: '400px',
+        maxWidth: '400px',
+        backgroundColor: 'var( --gray-body)',
+        boxShadow: 'var(--shadow-2)',
+      }
+    }}>
+      <DialogContent sx={{ padding: '1rem 1rem 0 1rem' }}>
         <DragDropContext onDragEnd={onDragEndHandler}>
           <div className={styles['order-boards__context']}>
 
@@ -85,8 +92,8 @@ export const OrderBoardDialog = ({
         </DragDropContext>
       </DialogContent>
 
-      <DialogActions style={{ display: 'flex', padding: '0 1.1rem 1.1rem 1.1rem' }}>
-        <Button color="info" variant="contained" onClick={handleClose}>Close</Button>
+      <DialogActions style={{ display: 'flex', padding: '0 1rem 1rem 0' }}>
+        <Button color="info" sx={{ ...agreeButtonStyles, marginRight: 0 }} variant="outlined" onClick={handleClose}>Close</Button>
       </DialogActions>
 
     </Dialog>

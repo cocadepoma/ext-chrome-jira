@@ -1,7 +1,7 @@
 import { AddCircleOutlineOutlined } from '@mui/icons-material';
-import { IconButton, Tooltip } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton, Tooltip } from '@mui/material';
 
 import { Category } from '../../../interfaces';
 
@@ -16,23 +16,23 @@ interface Props {
 
 export const CardHeader = ({ className = '', board, onClick, onRemoveBoard, onEditBoard }: Props) => {
   return (
-    <div className={className} style={{ backgroundColor: board.color || '#ffffff' }}>
-      <h4>{board.name}</h4>
+    <div className={className}>
+      <h4 style={{ color: board.color || '#ffffff' }}>{board.name}</h4>
 
       <Tooltip title="Edit board name">
-        <IconButton sx={{ width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onEditBoard(board)}>
+        <IconButton sx={{ color: 'var(--orange-dark)', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onEditBoard(board)}>
           <EditIcon fontSize="small" />
         </IconButton>
       </Tooltip>
 
       <Tooltip title="Delete board">
-        <IconButton sx={{ width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onRemoveBoard(board)}>
+        <IconButton sx={{ color: 'var(--red-dark)', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onRemoveBoard(board)}>
           <DeleteOutlineIcon fontSize="small" />
         </IconButton>
       </Tooltip>
 
       <Tooltip title="Add new ticket">
-        <IconButton sx={{ width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onClick(board)}>
+        <IconButton sx={{ color: 'var(--green-dark)', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onClick(board)}>
           <AddCircleOutlineOutlined />
         </IconButton>
       </Tooltip>

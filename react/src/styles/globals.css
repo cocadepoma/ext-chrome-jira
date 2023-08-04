@@ -521,11 +521,6 @@ html {
   height: 97vh;
 }
 
-body {
-  background-color: rgb(70 75 91);
-  /* height: 100%; */
-}
-
 /* total width */
 body::-webkit-scrollbar {
   background-color: #fff;

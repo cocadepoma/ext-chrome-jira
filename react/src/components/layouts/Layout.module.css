@@ -2,7 +2,7 @@
   height: 585px;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--gray-body);
 }
 
 .layout__content--container {

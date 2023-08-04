@@ -1,18 +1,17 @@
 import { FC, MouseEvent } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import LabelTwoToneIcon from '@mui/icons-material/LabelTwoTone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import EditIcon from '@mui/icons-material/Edit';
 import HourglassTopOutlinedIcon from '@mui/icons-material/HourglassTopOutlined';
+import LabelTwoToneIcon from '@mui/icons-material/LabelTwoTone';
 
 import { IconButton } from "@mui/material";
 
-import { Entry } from "../../../interfaces"
+import { Entry } from "../../../interfaces";
 
-import styles from './EntryCard.module.css'
-import { getTicketTime } from '../../../utils/utils';
 import { useNavigate } from "react-router-dom";
+import { getTicketTime } from '../../../utils/utils';
+import styles from './EntryCard.module.css';
 
 interface Props {
   entry: Entry;
@@ -46,15 +45,15 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
           >
             <div className={styles['entrycard__actions--container']} onClick={() => navigate(`/ticket/${entry.categoryId}/${entry._id}`)}>
 
-              <p className={styles.entrycard__text}><LabelTwoToneIcon style={{ color: entry.color || 'rgba(0,0,0,.5)' }} fontSize="small" /> {entry.description}</p>
+              <p className={styles.entrycard__text}><LabelTwoToneIcon style={{ color: entry.color || 'rgb(255, 255, 255)' }} fontSize="small" /> {entry.description}</p>
 
-              {/* <div className={styles['entrycard__buttons--container']}>
-                <IconButton
+              <div className={styles['entrycard__buttons--container']}>
+                {/* <IconButton
                   className={styles['entrycard__button--edit']}
                   onClick={onEdit}
                 >
                   <EditIcon fontSize="small" />
-                </IconButton>
+                </IconButton> */}
 
                 <IconButton
                   className={styles['entrycard__button--delete']}
@@ -63,7 +62,7 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
                   <DeleteOutlineIcon fontSize="small" />
                 </IconButton>
 
-              </div> */}
+              </div>
 
             </div>
 
