@@ -1,11 +1,9 @@
 import { FC, MouseEvent } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import HourglassTopOutlinedIcon from '@mui/icons-material/HourglassTopOutlined';
 import LabelTwoToneIcon from '@mui/icons-material/LabelTwoTone';
 
-import { IconButton } from "@mui/material";
 
 import { Entry } from "../../../interfaces";
 
@@ -55,12 +53,12 @@ export const EntryCard: FC<Props> = ({ entry, index, setActiveDeleteTicket, setA
                   <EditIcon fontSize="small" />
                 </IconButton> */}
 
-                <IconButton
+                {/* <IconButton
                   className={styles['entrycard__button--delete']}
                   onClick={onDelete}
                 >
                   <DeleteOutlineIcon fontSize="small" />
-                </IconButton>
+                </IconButton> */}
 
               </div>
 

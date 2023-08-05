@@ -19,20 +19,20 @@ export const CardHeader = ({ className = '', board, onClick, onRemoveBoard, onEd
     <div className={className}>
       <h4 style={{ color: board.color || '#ffffff' }}>{board.name}</h4>
 
-      <Tooltip title="Edit board name">
-        <IconButton sx={{ color: 'var(--orange-dark)', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onEditBoard(board)}>
-          <EditIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-
       <Tooltip title="Delete board">
         <IconButton sx={{ color: 'var(--red-dark)', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onRemoveBoard(board)}>
           <DeleteOutlineIcon fontSize="small" />
         </IconButton>
       </Tooltip>
 
+      <Tooltip title="Edit board">
+        <IconButton sx={{ color: '#fff', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onEditBoard(board)}>
+          <EditIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+
       <Tooltip title="Add new ticket">
-        <IconButton sx={{ color: 'var(--green-dark)', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onClick(board)}>
+        <IconButton sx={{ color: '#fff', width: '1.1rem', height: '1.1rem', '& svg': { fontSize: '1rem' } }} onClick={() => onClick(board)}>
           <AddCircleOutlineOutlined />
         </IconButton>
       </Tooltip>

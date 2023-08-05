@@ -58,7 +58,7 @@ export const AddEntryDialog = ({
         <DialogContentText sx={{
           color: 'rgb(255 255 255 / 80%)',
           fontSize: '0.7rem',
-          margin: '10px 0'
+          margin: '10px 0 15px'
         }}>
           Add a new ticket to the board: <strong style={{ color: 'rgb(25 111 230)' }}>{board?.name}</strong>
         </DialogContentText>
@@ -67,13 +67,19 @@ export const AddEntryDialog = ({
           fullWidth
           autoFocus
           multiline
+          rows={3}
           label="Ticket name"
           helperText={inputValue.trim().length <= 0 && isTouched && "Insert a value"}
           error={inputValue.trim().length <= 0 && isTouched}
           value={inputValue}
           onChange={onTextChange}
           onBlur={() => setIsTouched(true)}
-          sx={{ ...boardsTextField, marginBottom: '0.5rem', }}
+          sx={{
+            ...boardsTextField, marginBottom: '0.5rem', height: '7rem', '& div.MuiInputBase-root': {
+              color: 'white',
+              padding: '10px'
+            },
+          }}
         />
       </DialogContent>
       <DialogActions style={{ display: 'flex', justifyContent: 'space-between' }}>

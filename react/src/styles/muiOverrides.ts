@@ -65,10 +65,10 @@ export const boardsTextField = {
     fontSize: '0.7rem',
   },
   '& input': {
-    fontSize: '0.85rem',
+    fontSize: '0.75rem',
   },
   '& textarea': {
-    fontSize: '0.85rem',
+    fontSize: '0.75rem',
   },
   '& label.Mui-focused': {
     color: 'orange',

@@ -34,7 +34,7 @@ export const TicketDetail = () => {
   });
 
   const [selectedBoard, setSelectedBoard] = useState<Category | null>(null);
-  const [color, setColor] = useState<string>('rgba(0,0,0,.5)');
+  const [color, setColor] = useState<string>('#fff');
 
   const [activeDeleteTicket, setActiveDeleteTicket] = useState<boolean>(false);
 
@@ -54,7 +54,7 @@ export const TicketDetail = () => {
     const ticket = board.tickets.find(tk => tk._id === ticketId)!;
     setSelectedBoard(board);
 
-    setColor(ticket.color || 'rgba(0,0,0,.5)');
+    setColor(ticket.color || '#fff');
     setTicket(ticket);
     setForm({ description: ticket.description, content: ticket.content || '' });
   };
@@ -170,7 +170,7 @@ export const TicketDetail = () => {
       <Grid
         container
         justifyContent="center"
-        sx={{ marginTop: '33px', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
+        sx={{ marginTop: '20px', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
       >
         {ticket && (
           <Grid item sx={{ width: '59%' }}>
@@ -195,7 +195,7 @@ export const TicketDetail = () => {
                     '& legend': {
                       width: '2.2rem'
                     },
-                    marginBottom: '14px', fontSize: 10,
+                    marginBottom: '12px', fontSize: 10,
                     '& .MuiInputBase-root': {
                       padding: '8.5px 14px',
                       color: 'white',
@@ -270,7 +270,7 @@ export const TicketDetail = () => {
                 <TextField
                   sx={{
                     ...boardsTextField,
-                    height: '8.5rem',
+                    height: '7.5rem',
                     '& div.MuiInputBase-root': {
                       color: 'white',
                       height: 'auto',
@@ -280,7 +280,7 @@ export const TicketDetail = () => {
                       width: '3.5rem'
                     },
                     marginBottom: '14px',
-                    marginTop: '14px',
+                    marginTop: '7px',
                     '& .MuiInputBase-root': { backgroundColor: '#ffffff8a' },
                     '& .MuiFormLabel-root:not(.MuiFocused)': { top: '-3px', left: '2px' },
                     '& .MuiInputLabel-root.MuiInputLabel-shrink': {
@@ -297,7 +297,7 @@ export const TicketDetail = () => {
                   value={form.content}
                 />
 
-                <Typography variant="body1" sx={{ color: '#fff', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                <Typography variant="body1" sx={{ color: '#fff', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.6rem', margin: '0.6rem 0px 0.5rem' }}>
                   Ticket Color:
                   <span style={{
                     boxShadow: '1px 1px 2px -1px rgba(0,0,0,0.6)',
@@ -308,7 +308,7 @@ export const TicketDetail = () => {
                   }} />
                 </Typography>
                 <GithubPicker color={color} onChangeComplete={onColorChange} colors={
-                  ['#f44336', '#e81e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722']
+                  ['#fff', '#f44336', '#e81e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722']
                 } />
               </CardContent>
 
