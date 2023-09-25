@@ -1,12 +1,11 @@
 .layout__container {
-  height: 585px;
-  display: flex;
-  flex-direction: column;
+  height: 540px;
   background-color: var(--gray-body);
+  animation: fadeIn 1s;
 }
 
 .layout__content--container {
   flex-grow: 1;
-  height: calc(600px - 64px);
+  height: 536px;
   margin-top: 2rem;
 }

@@ -1,13 +1,13 @@
 @import './globals.css';
 
 html {
-  height: 586px;
-  overflow: hidden;
+  /* height: 560px;
+  overflow: hidden; */
 }
 
 body,
 #root {
-  height: 586px;
+  height: 560px;
   width: 100%;
   min-width: 800px;
   background-color: var(--gray-body)!important;
