@@ -4,9 +4,7 @@
   "version": "2.3.2",
   "manifest_version": 3,
   "permissions": [
-    "storage",
-    "identity",
-    "identity.email"
+    "storage"
   ],
   "action": {
     "default_title": "Kanbanify",

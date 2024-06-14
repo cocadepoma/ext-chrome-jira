@@ -166,14 +166,18 @@ export const TicketDetail = () => {
   };
 
   return (
-    <div>
+    <div style={{
+      height: '554px', 
+      marginTop: '2rem',
+      animation: 'fadeIn 0.3s ease-in-out',
+    }}>
       <Grid
         container
         justifyContent="center"
-        sx={{ marginTop: '20px', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
+        sx={{ height: '554px', marginTop: '2rem', '& label, & textarea, & input': { fontSize: '0.8rem' } }}
       >
         {ticket && (
-          <Grid item sx={{ width: '59%' }}>
+          <Grid item sx={{ width: '59%', display: 'flex', margin: '1rem' }}>
             <Card sx={{ backgroundColor: 'var(--gray-dark)', boxShadow: 'var(--shadow-xy)' }}>
               <CardHeader
                 sx={{ padding: '10px 16px 9px 16px', backgroundColor: 'var(--gray-heading)' }}
